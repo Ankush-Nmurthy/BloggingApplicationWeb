@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.blogsculpture.appconfig.Userdetails;
+import com.blogsculpture.dto.UserSignupDTO;
 import com.blogsculpture.event.RegistrationCompleteEvent;
 import com.blogsculpture.model.User;
 import com.blogsculpture.service.UserService;
@@ -24,12 +25,6 @@ public class UserController {
 
 	@Autowired
 	private ApplicationEventPublisher publisher;
-
-	// @GetMapping("/login")
-	// public String showLoginForm(Model model) {
-	// model.addAttribute("user", new User());
-	// return "login";
-	// }
 
 	@GetMapping("/login")
 	public String showLoginForm() {
@@ -48,21 +43,35 @@ public class UserController {
 		if (authenticatedUser != null) {
 			return "redirect:index";
 		}
-		return "login";
+		System.out.println("authenticated....!");
+		return "index";
+	}
+
+	@GetMapping("/registration")
+	public String register(Model model) {
+		model.addAttribute("userDto", new UserSignupDTO());
+		return "/registration";
 	}
 
 	@PostMapping("/registration")
-	public String register(@ModelAttribute("user") User user, Model model) {
-		userService.registerUser(user);
+	public String showRegistrationForm(@ModelAttribute("userDto") UserSignupDTO userDto, Model model) {
+		User user = userService.registerUser(userDto);
 		publisher.publishEvent(new RegistrationCompleteEvent(user, ""));
 		return "redirect:registration?success";
 	}
 
-	@GetMapping("/registration")
-	public String showRegistrationForm(Model model) {
-		model.addAttribute("user", new User());
-		return "registration";
-	}
+//	@PostMapping("/registration")
+//	public String register(@ModelAttribute("user") User user, Model model) {
+//		userService.registerUser(user);
+//		publisher.publishEvent(new RegistrationCompleteEvent(user, ""));
+//		return "redirect:registration?success";
+//	}
+
+//	@GetMapping("/registration")
+//	public String showRegistrationForm(Model model) {
+//		model.addAttribute("userDto", new UserSignupDTO());
+//		return "registration";
+//	}
 
 	@GetMapping("/check")
 	public String showsecurityContext() {

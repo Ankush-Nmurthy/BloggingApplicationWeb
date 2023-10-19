@@ -20,17 +20,7 @@ public class BlogController {
 
     @GetMapping("/index")
     public String getIndexPageOfWebApplication() {
-        return "index";
-    }
-
-    @GetMapping("/widget")
-    public String getwidgets() {
-        return "widgets";
-    }
-
-    @GetMapping("/admin/index")
-    public String getIndex2() {
-        return "admin/index";
+        return "/index";
     }
 
     @GetMapping("/dashboard")

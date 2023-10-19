@@ -16,7 +16,6 @@ public class CustomUser implements UserDetails {
 	private User user;
 
 	public CustomUser(User user) {
-		System.out.println("inside the custom user class");
 		this.user = user;
 	}
 

@@ -33,7 +33,7 @@ public class Appconfiguration {
 				.csrf(csrf -> csrf.disable())
 				.formLogin(log -> log.loginPage("/login")
 						.loginProcessingUrl("/login")
-						.defaultSuccessUrl("/index")
+						.defaultSuccessUrl("/registration")
 						.failureUrl("/login?error=true")
 						.permitAll()
 
