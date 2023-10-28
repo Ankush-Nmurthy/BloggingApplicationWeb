@@ -25,7 +25,7 @@ public class Appconfiguration {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-				.requestMatchers("/").permitAll()
+				.requestMatchers("/admin/**").hasRole("ADMIN")
 				.requestMatchers("/login").permitAll()
 				.requestMatchers("/registration").permitAll()
 				.requestMatchers("/check").authenticated()
@@ -33,17 +33,20 @@ public class Appconfiguration {
 				.csrf(csrf -> csrf.disable())
 				.formLogin(log -> log.loginPage("/login")
 						.loginProcessingUrl("/login")
-						.defaultSuccessUrl("/registration")
+						.defaultSuccessUrl("/redirectUserBasedOnRole")
 						.failureUrl("/login?error=true")
 						.permitAll()
 
-				);
+				).logout(log -> log.logoutUrl("/logout")
+						.logoutSuccessUrl("/login?logout")
+						.invalidateHttpSession(true));
 
 		return http.build();
 	}
 
 	@Bean
 	public DaoAuthenticationProvider getAuthenticationProvider() {
+		System.out.println("inside the Dao authentication.");
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
 		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
 		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());

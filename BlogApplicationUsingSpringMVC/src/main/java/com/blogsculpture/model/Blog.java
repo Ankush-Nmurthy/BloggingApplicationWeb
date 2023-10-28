@@ -40,10 +40,12 @@ public class Blog {
 
 	private String content;
 
+	// private or public
 	private String accessType;
 
 	private Date date = new Date();
 
+	//Drafted or completed.
 	private Status status;
 
 	@ManyToOne(fetch = FetchType.LAZY)

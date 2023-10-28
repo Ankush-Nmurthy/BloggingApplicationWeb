@@ -5,10 +5,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
+import com.blogsculpture.appconfig.CustomUser;
 import com.blogsculpture.dto.UserSignupDTO;
+import com.blogsculpture.exceptions.UserNotFoundException;
 import com.blogsculpture.model.Address;
 import com.blogsculpture.model.User;
 import com.blogsculpture.repo.AddressRepository;
@@ -37,12 +41,6 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
-	// @Override
-	// public User registerUser(User user) {
-	// user.setPassword(encoder.encode(user.getPassword()));
-	// user.setRole("ROLE_USER");
-	// return userRepository.save(user);
-	// }
 
 	@Override
 	public User registerUser(UserSignupDTO userDto) {
@@ -54,6 +52,7 @@ public class UserServiceImpl implements UserService {
 		address.setCountry(userDto.getAddressDTO().getCountry());
 		user.setPassword(encoder.encode(user.getPassword()));
 		user.setRole("ROLE_USER");
+		user.setActive(true);
 		address.setUser(user);
 		userRepository.save(user);
 		addressRepository.save(address);
@@ -68,10 +67,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findById(Integer id) {
 		Optional<User> user = userRepository.findById(id);
-		if (user.isPresent()) {
-			return user.get();
+		if (!user.isPresent()) {
+			throw new UserNotFoundException("user with give is not present : "+id);
 		}
-		return null;
+		return user.get();
 	}
 
 	@Override
@@ -84,4 +83,35 @@ public class UserServiceImpl implements UserService {
 		userRepository.deleteById(id);
 	}
 
+	@Override
+	public String deactivateUserAccount(Integer userid) {
+		Optional<User> userById = userRepository.findById(userid);
+		userById.get().setActive(false);
+		return "User deactivated successfully";
+	}
+	
+
+	@Override
+	public String updateUser(User user, Integer id) {
+		User foundUser = findById(id);
+		if(user.getName() != null) foundUser.setName(user.getName());
+		if(user.getNationality() != null) foundUser.setNationality(user.getNationality());
+		if(user.getMobileno() != null) foundUser.setMobileno(user.getMobileno());
+		if(user.getGender() != null) foundUser.setGender(user.getGender());
+		if(user.getReligion() != null) foundUser.setReligion(user.getReligion());
+		if(user.getAddress().getCity() != null) foundUser.getAddress().setCity(user.getAddress().getCity());
+		if(user.getAddress().getCountry() != null) foundUser.getAddress().setCountry(user.getAddress().getCountry());
+		if(user.getAddress().getState() != null) foundUser.getAddress().setState(user.getAddress().getState());
+		foundUser.setUpdatedAt(LocalDateTime.now());
+		userRepository.save(foundUser);
+		addressRepository.save(foundUser.getAddress());
+		return "User updated successfully.";
+	}
+	
+	@Override
+	public void setUsernameAndProfileImageToModel(Model model) {
+		CustomUser authenticatedUser = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username",authenticatedUser.getUser().getName());
+		model.addAttribute("profileImage",authenticatedUser.getUser().getEncoded());
+	}
 }
