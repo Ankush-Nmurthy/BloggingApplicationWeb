@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="base_admin_layout"
+>
+  <head>
+    <link rel="stylesheet" th:href="@{/css/registration.css}" />
+  </head>
+  <body style="background: white">
+    <div layout:fragment="content">
+      <h2>Edit Details</h2>
+      <div class="details" style="width: 100%; height: 100%">
+        <div class="content">
+          <form th:action="@{/admin/edit}" method="Post" th:object="${userDto}">
+            <div class="user-details">
+              <!-- name -->
+              <div class="input-box">
+                <span class="details">User-Id</span>
+                <input
+                  type="text"
+                  id="userid"
+                  th:field="*{userId}"
+                  placeholder="User Id"
+                  readonly
+                />
+              </div>
+              <div class="input-box">
+                <span class="details">Full Name</span>
+                <input
+                  type="text"
+                  id="name"
+                  th:field="*{name}"
+                  placeholder="Name"
+                  required
+                />
+              </div>
+              <div class="input-box">
+                <span class="details">Email</span>
+                <input
+                  type="email"
+                  id="email"
+                  th:field="*{email}"
+                  placeholder="Email"
+                  required
+                  readonly
+                />
+              </div>
+              <div class="input-box">
+                <span class="details">Nationality</span>
+                <input
+                  type="text"
+                  id="nationality"
+                  th:field="*{nationality}"
+                  placeholder="Nationality"
+                  required
+                />
+              </div>
+              <div class="input-box">
+                <span class="details">Religion</span>
+                <input
+                  type="text"
+                  id="religion"
+                  th:field="*{religion}"
+                  placeholder="Religion"
+                  required
+                />
+              </div>
+              <div class="input-box">
+                <span class="details">Gender</span>
+                <input
+                  type="text"
+                  id="gendre"
+                  th:field="*{gender}"
+                  placeholder="Gender"
+                  required
+                />
+              </div>
+              <div class="input-box">
+                <span class="details">Phone Number</span>
+                <input
+                  type="text"
+                  id="mobileno"
+                  th:field="*{mobileno}"
+                  placeholder="Phone Number"
+                  required
+                />
+              </div>
+              <div class="input-box">
+                <span class="details">City</span>
+                <input
+                  type="text"
+                  id="city"
+                  class="form-control form-control-lg"
+                  th:field="*{address.city}"
+                  placeholder="City"
+                  required
+                />
+              </div>
+              <div class="input-box">
+                <span class="details">State</span>
+                <input
+                  type="text"
+                  id="state"
+                  class="form-control form-control-lg"
+                  th:field="*{address.state}"
+                  placeholder="State"
+                  required
+                />
+              </div>
+              <div class="input-box">
+                <span class="details">Country</span>
+                <input
+                  type="text"
+                  id="country"
+                  class="form-control form-control-lg"
+                  th:field="*{address.country}"
+                  placeholder="Country"
+                  required
+                />
+              </div>
+            </div>
+            <button
+              class="btn btn-outline-light btn-lg px-5 btn-login"
+              style="background-color: aqua; display: block; margin: auto"
+              type="submit"
+              onclick="return confirm('Are you sure you want to update your details')"
+            >
+              Update Details
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

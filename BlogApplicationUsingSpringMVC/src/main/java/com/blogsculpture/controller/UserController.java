@@ -2,14 +2,13 @@ package com.blogsculpture.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import com.blogsculpture.appconfig.Userdetails;
+import com.blogsculpture.appconfig.CustomUser;
 import com.blogsculpture.dto.UserSignupDTO;
 import com.blogsculpture.event.RegistrationCompleteEvent;
 import com.blogsculpture.model.User;
@@ -21,61 +20,53 @@ public class UserController {
 	private UserService userService;
 
 	@Autowired
-	private Userdetails userdetails;
-
-	@Autowired
 	private ApplicationEventPublisher publisher;
 
-	@GetMapping("/login")
-	public String showLoginForm() {
-		return "login";
+	// @GetMapping("/login")
+	// public String getLoginForm() {
+	// return "/login";
+	// }
+
+	// @GetMapping("/registration")
+	// public String registerUser(Model model) {
+	// model.addAttribute("userDto", new UserSignupDTO());
+	// return "/registration";
+	// }
+
+	// @PostMapping("/registration")
+	// public String registerUser(@ModelAttribute("userDto") UserSignupDTO userDto,
+	// Model model) {
+	// User user = userService.registerUser(userDto);
+	// publisher.publishEvent(new RegistrationCompleteEvent(user, ""));
+	// return "redirect:registration?success";
+	// }
+
+	@GetMapping("/user")
+	public String getHomePage(Model model) {
+		userService.setUsernameAndProfileImageToModel(model);
+		return "/user/index";
 	}
 
-	@PostMapping("/login")
-	public String login(@ModelAttribute("user") User user, Authentication session) {
-		System.out.println(user);
-		User authenticatedUser = userService.loginUser(user.getEmail(), user.getPassword());
-		userdetails.loadUserByUsername(user.getEmail());
-		SecurityContextHolder.getContext().setAuthentication((Authentication) authenticatedUser);
-		String name = SecurityContextHolder.getContext().getAuthentication().getName();
-		System.out.println(name);
-		System.out.println(authenticatedUser);
-		if (authenticatedUser != null) {
-			return "redirect:index";
-		}
-		System.out.println("authenticated....!");
-		return "index";
+	@GetMapping("/user/edit")
+	public String updateUser(Model model) {
+		userService.setUsernameAndProfileImageToModel(model);
+		CustomUser authenticatedUser = (CustomUser) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		User user = userService.findById(authenticatedUser.getUser().getUserId());
+		model.addAttribute("userDto", user);
+		return "/user/edit_details";
 	}
 
-	@GetMapping("/registration")
-	public String register(Model model) {
-		model.addAttribute("userDto", new UserSignupDTO());
-		return "/registration";
+	@PostMapping("/user/edit")
+	public String updateUser(@ModelAttribute("userDto") User userDto, Model model) {
+		userService.setUsernameAndProfileImageToModel(model);
+		userService.updateUser(userDto, userDto.getUserId());
+		return "redirect:/user/edit";
 	}
 
-	@PostMapping("/registration")
-	public String showRegistrationForm(@ModelAttribute("userDto") UserSignupDTO userDto, Model model) {
-		User user = userService.registerUser(userDto);
-		publisher.publishEvent(new RegistrationCompleteEvent(user, ""));
-		return "redirect:registration?success";
-	}
-
-//	@PostMapping("/registration")
-//	public String register(@ModelAttribute("user") User user, Model model) {
-//		userService.registerUser(user);
-//		publisher.publishEvent(new RegistrationCompleteEvent(user, ""));
-//		return "redirect:registration?success";
-//	}
-
-//	@GetMapping("/registration")
-//	public String showRegistrationForm(Model model) {
-//		model.addAttribute("userDto", new UserSignupDTO());
-//		return "registration";
-//	}
-
-	@GetMapping("/check")
-	public String showsecurityContext() {
-		System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
-		return "registration";
+	@GetMapping("/user/blog")
+	public String getBlogPage(Model model) {
+		userService.setUsernameAndProfileImageToModel(model);
+		return "/commonblogLayout/blog_page";
 	}
 }

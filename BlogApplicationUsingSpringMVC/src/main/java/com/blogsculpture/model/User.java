@@ -1,7 +1,6 @@
 package com.blogsculpture.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,6 +12,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Email;
@@ -23,6 +23,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString.Exclude;
 
 @Entity
 @Data
@@ -43,7 +44,7 @@ public class User {
 	private String email;
 
 	private String nationality;
-	
+
 	private String mobileno;
 
 	private String role;
@@ -52,29 +53,42 @@ public class User {
 
 	private String religion;
 
+	@Lob
+	@Column(columnDefinition = "LONGBLOB")
+	private byte[] data;
+	
+	private String encoded;
+
 	private LocalDateTime createdAt;
 
 	private LocalDateTime updatedAt;
+
+	private boolean isActive;
 
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<Blog> blogs = new ArrayList<>();
+	@Exclude
+	private List<Blog> blogs;
 
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@Exclude
 	private Address address;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@Exclude
 	private Set<Like> likes;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@Exclude
 	private Set<Comment> comments;
 
 	public User(
 			@NotBlank(message = "name cannot be blank") @Size(min = 3, max = 20, message = "name must larger then 3 and lesser then 20 character.") String name,
 			@Email(regexp = "[a-z0-9.]+@[a-z0-9.]+\\.[a-z]{2,3}", flags = Flag.CASE_INSENSITIVE, message = "Please provide a valid email") @NotBlank(message = "email cannot be blank") String email,
-			String nationality, String religion, LocalDateTime createdAt, String password, String gender,String mobileno) {
+			String nationality, String religion, LocalDateTime createdAt, String password, String gender,
+			String mobileno) {
 		super();
 		this.name = name;
 		this.email = email;
@@ -85,5 +99,4 @@ public class User {
 		this.gender = gender;
 		this.mobileno = mobileno;
 	}
-
 }

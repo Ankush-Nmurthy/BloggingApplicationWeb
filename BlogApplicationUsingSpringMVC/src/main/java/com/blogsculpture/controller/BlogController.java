@@ -23,52 +23,10 @@ public class BlogController {
         return "/index";
     }
 
-    @GetMapping("/dashboard")
-    public String showDashboard(Model model) {
-        List<Blog> blogs = blogService.getAllBlogs();
-        model.addAttribute("blogs", blogs);
-        return "dashboard";
+    @GetMapping("/blog")
+    public String getBlogPageOfUser() {
+        return "/commonblogLayout/blogIndex";
     }
 
-    @GetMapping("/create-blog")
-    public String showCreateBlogForm(Model model) {
-        model.addAttribute("blog", new Blog());
-        return "create-blog";
-    }
-
-    @PostMapping("/create-blog")
-    public String createBlog(@ModelAttribute("blog") Blog blog) {
-        blogService.createBlog(blog);
-        return "redirect:/dashboard";
-    }
-
-    @GetMapping("/user/{userId}")
-    public String getBlogsByUserId(@PathVariable Integer userId, Model model) {
-        List<Blog> blogs = blogService.getBlogsByUserId(userId);
-        model.addAttribute("blogs", blogs);
-        return "blog-list";
-    }
-
-    @GetMapping("/category/{category}")
-    public String getBlogsByCategory(@PathVariable String category, Model model) {
-        List<Blog> blogs = blogService.getBlogsByCategory(category);
-        model.addAttribute("blogs", blogs);
-        return "blog-list";
-    }
-
-    // Get blogs by author name
-    @GetMapping("/author/{authorName}")
-    public String getBlogByAuthorName(@PathVariable String authorName, Model model) {
-        List<Blog> blogs = blogService.getBlogByAuthorName(authorName);
-        model.addAttribute("blogs", blogs);
-        return "blog-list";
-    }
-
-    // Get all blogs
-    @GetMapping("/all")
-    public String getAllBlogs(Model model) {
-        List<Blog> blogs = blogService.getAllBlogs();
-        model.addAttribute("blogs", blogs);
-        return "blog-list";
-    }
+    
 }

@@ -6,7 +6,7 @@
 >
   <body>
     <div layout:fragment="content">
-      <h1>All Users</h1>
+      <h1>All Admins</h1>
       <div class="row">
         <div class="col-lg-12">
           <section class="panel">
@@ -21,23 +21,21 @@
                   <th><i class="icon_mail_alt"></i> Email</th>
                   <th><i class="icon_mobile"></i> Mobile No</th>
                   <th><i class="icon_gender"></i> Gender</th>
-                  <th><i class="icon_religion"></i> Religion</th>
-                  <th><i class="icon_cogs"></i> Acc Created</th>
-                  <th>Make-Admin | Deactivate</th>
+                  <th><i class="icon_cogs"></i> Acc Updated</th>
+                  <th>Make-user | Deactivate</th>
                   <th><i class="icon-reorder"> Activate Acc </i></th>
                 </tr>
                 <!--================ Table header end ================= -->
                 <tr
                   th:each="user : ${users}"
-                  th:if="${user.role ne 'ROLE_ADMIN'}"
+                  th:if="${user.role ne 'ROLE_USER'}"
                 >
                   <td th:text="${user.name}"></td>
                   <td th:text="${user.nationality}"></td>
                   <td th:text="${user.email}"></td>
                   <td th:text="${user.mobileno}"></td>
                   <td th:text="${user.gender}"></td>
-                  <td th:text="${user.religion}"></td>
-                  <td th:text="${user.createdAt}"></td>
+                  <td th:text="${user.updatedAt}"></td>
                   <td>
                     <div
                       class="btn-group"
