@@ -10,4 +10,10 @@ public class GlobalExceptionHandler {
     public String getAllExceptions() {
         return "redirect:404";
     }
+
+    @ExceptionHandler(NumberFormatException.class)
+    public String getNumberFormatterExceptin(NumberFormatException ne){
+        return "error";
+    }
+
 }

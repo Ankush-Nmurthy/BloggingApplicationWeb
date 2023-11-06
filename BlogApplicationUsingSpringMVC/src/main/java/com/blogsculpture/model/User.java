@@ -1,7 +1,10 @@
 package com.blogsculpture.model;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -22,11 +25,14 @@ import jakarta.validation.constraints.Pattern.Flag;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString.Exclude;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -56,7 +62,7 @@ public class User {
 	@Lob
 	@Column(columnDefinition = "LONGBLOB")
 	private byte[] data;
-	
+
 	private String encoded;
 
 	private LocalDateTime createdAt;
@@ -76,11 +82,13 @@ public class User {
 	@Exclude
 	private Address address;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	// can remove both the likes and likes and comments because the user is
+	// connected to blog, and both likes and comments are connected to blog
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@Exclude
 	private Set<Like> likes;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@Exclude
 	private Set<Comment> comments;
 
@@ -99,4 +107,33 @@ public class User {
 		this.gender = gender;
 		this.mobileno = mobileno;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(data);
+		result = prime * result + Objects.hash(createdAt, email, encoded, gender, isActive, mobileno, name, nationality,
+				password, religion, role, updatedAt, userId);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(createdAt, other.createdAt) && Arrays.equals(data, other.data)
+				&& Objects.equals(email, other.email) && Objects.equals(encoded, other.encoded)
+				&& Objects.equals(gender, other.gender) && isActive == other.isActive
+				&& Objects.equals(mobileno, other.mobileno) && Objects.equals(name, other.name)
+				&& Objects.equals(nationality, other.nationality) && Objects.equals(password, other.password)
+				&& Objects.equals(religion, other.religion) && Objects.equals(role, other.role)
+				&& Objects.equals(updatedAt, other.updatedAt) && Objects.equals(userId, other.userId);
+	}
+
 }

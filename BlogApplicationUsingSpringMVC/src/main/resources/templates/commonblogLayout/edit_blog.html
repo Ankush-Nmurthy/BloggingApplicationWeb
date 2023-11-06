@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog : Editor</title>
+    <link rel="stylesheet" th:href="@{/css/add-edit-blog.css}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link
+      th:href="@{https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css}"
+      rel="stylesheet"
+    />
+    <link th:href="@{/css/elegant-icons-style.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/blogMain.css}" />
+  </head>
+  <body>
+    <form
+      th:action="@{/editBlog/{id}(id=${blogEntity.blogId})}"
+      method="post"
+      th:object="${blogEntity}"
+      enctype="multipart/form-data"
+    >
+      <!-- <div
+        class="banner responsive-div"
+        style="width: 100%; position: relative; border: 1px solid red"
+      >
+        <img
+          id="display-img"
+          th:src="@{'data:image/png;base64,'+${blogEntity.encoded}}"
+          style="width: 100%; height: 400px; display: block"
+        />
+      </div> -->
+      <div th:if="${param.error}" style="width: 30%; margin: auto; color: red">
+        <p th:text="${param.error}" style="text-align: center"></p>
+      </div>
+      <div
+        th:if="${param.success}"
+        style="width: 30%; margin: auto; color: rgb(126, 202, 11)"
+      >
+        <p th:text="${param.success}" style="text-align: center"></p>
+      </div>
+      <div class="banner">
+        <img
+          id="display-img"
+          th:src="@{'data:image/png;base64,'+${blogEntity.encoded}}"
+          alt=""
+        />
+        <div class="image-upload">
+          <input type="file" accept="image/*" id="uploadBtn" name="file" />
+          <label for="uploadBtn"
+            ><i class="fa-solid fa-upload"></i> Upload Banner</label
+          >
+        </div>
+      </div>
+      <!-- <div>
+        <label>Update Image Here</label>
+        <input
+          placeholder="Update image here"
+          type="file"
+          accept="image/*"
+          id="banner-upload"
+          name="file"
+        />
+      </div> -->
+      <div class="privacyInfo">
+        <div class="subdiv">
+          <select th:field="*{status}" required>
+            <option value="">Status</option>
+            <option value="DRAFT">DRAFT</option>
+            <option value="COMPLETED">COMPLETED</option>
+          </select>
+        </div>
+        <div class="subdiv">
+          <select th:field="*{accessType}" required>
+            <option value="">Access Type</option>
+            <option value="PUBLIC">PUBLIC</option>
+            <option value="PRIVATE">PERSONAL</option>
+          </select>
+        </div>
+        <div class="subdiv">
+          <select th:field="*{category}" name="category" required>
+            <option value="">Category</option>
+            <option value="TRAVEL">TRAVEL</option>
+            <option value="HEALTH">HEALTH AND WELLNESS</option>
+            <option value="TECHNOLOGY">PUBLIC</option>
+            <option value="lIFESTYLE">PERSONAL</option>
+            <option value="FOOD & COOKING">FOOD & COOKING</option>
+            <option value="PERSONAL DEVELOPMENT">PERSONAL DEVELOPMENT</option>
+            <option value="FINANCE & MONEY">FINANCE & MONEY</option>
+            <option value="HOME & INTERIOR DESIGN">
+              HOME & INTERIOR DESIGN
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="blog">
+        <textarea
+          type="text"
+          class="title"
+          placeholder="Blog title..."
+          name="heading"
+          th:field="*{title}"
+        ></textarea>
+        <textarea
+          type="text"
+          class="article"
+          placeholder="Start writing here..."
+          th:field="*{content}"
+        ></textarea>
+
+        <input
+          type="hidden"
+          th:feild="*{content}"
+          id="editedContent"
+          name="edited-content"
+        />
+      </div>
+
+      <div class="blog-options">
+        <button
+          type="submit"
+          class="btn dark publish-btn"
+          style="
+            border: 1px solid red;
+            padding: 8px 50px;
+            background-color: black;
+            color: white;
+            border-radius: 8px;
+          "
+          onclick="return confirm('would you like to save the edited.')"
+        >
+          publish
+        </button>
+      </div>
+    </form>
+    <footer>
+      <div class="footer-container">
+        <div class="sec aboutus">
+          <h2>About Us</h2>
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus
+            quisquam minus quo illo numquam vel incidunt pariatur hic commodi
+            expedita tempora praesentium at iure fugiat ea, quam laborum aperiam
+            veritatis.
+          </p>
+          <ul class="sci">
+            <li>
+              <a href="#"><i class="bx bxl-facebook"></i></a>
+            </li>
+            <li>
+              <a href="#"><i class="bx bxl-instagram"></i></a>
+            </li>
+            <li>
+              <a href="#"><i class="bx bxl-twitter"></i></a>
+            </li>
+            <li>
+              <a href="#"><i class="bx bxl-linkedin"></i></a>
+            </li>
+          </ul>
+        </div>
+        <div class="sec quicklinks">
+          <h2>Quick Links</h2>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+          </ul>
+        </div>
+        <div class="sec contactBx">
+          <h2>Contact Info</h2>
+          <ul class="info">
+            <li>
+              <span><i class="bx bxs-map"></i></span>
+              <span
+                >Lorem ipsum dolor sit amet<br />
+                consectetur adipisicing elit.<br />
+                Placeat, quibusdam.</span
+              >
+            </li>
+            <li>
+              <span><i class="bx bx-envelope"></i></span>
+              <p>
+                <a href="ankushn566@gmail.com">ankushn566@gmail.com</a>
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+    <script>
+      //if you are using th:field then there is no need to give "ID" and "Name" of the element.
+      const textarea = document.getElementById("content");
+      const hiddenInput = document.getElementById("editedContent");
+      textarea.addEventListener("input", function () {
+        const content = textarea.value;
+        const contentWithNewlines = content.replace(/\n/g, "\\n");
+        textarea.value = contentWithNewlines;
+      });
+    </script>
+    <script>
+      const fileInput = document.getElementById("uploadBtn");
+      const imageContainer = document.querySelector(".image-upload");
+      const displayImage = document.getElementById("display-img");
+      fileInput.addEventListener("change", function () {
+        if (fileInput.files && fileInput.files[0]) {
+          const reader = new FileReader();
+          //The reader will read the file as and when it gets the image.
+          // we hava a event that is onload when file is loaded, this event will get triggered.
+
+          reader.onload = function (e) {
+            displayImage.src = e.target.result;
+          };
+          reader.readAsDataURL(fileInput.files[0]);
+        }
+      });
+    </script>
+  </body>
+</html>

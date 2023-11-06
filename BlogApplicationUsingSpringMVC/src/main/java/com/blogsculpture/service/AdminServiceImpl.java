@@ -17,7 +17,9 @@ import com.blogsculpture.repo.UserRepository;
 @Service
 public class AdminServiceImpl implements AdminService {
 
+	
 	public UserRepository userRepository;
+	
 	public BlogRepository blogRepository;
 	
 	@Autowired
@@ -65,5 +67,6 @@ public class AdminServiceImpl implements AdminService {
 		model.addAttribute("username",authenticatedUser.getUser().getName());
 		model.addAttribute("profileImage",authenticatedUser.getUser().getEncoded());
 	}
+
 
 }

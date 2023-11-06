@@ -10,14 +10,21 @@
       th:href="@{https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css}"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}"
+      integrity="sha384-<INTEGRITY>"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
     <link th:href="@{/css/elegant-icons-style.css}" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/blogMain.css}" />
   </head>
   <body>
-    <header style="border: 1px solid red; width: 100%">
+    <header style="width: 100%">
       <div class="nav container-1">
         <div>
-          <a th:href="@{/user/blog}" class="logo"
+          <a th:href="@{/blog/1?category=all}" class="logo"
             >Blog <span>Sculpture</span></a
           >
         </div>
@@ -25,7 +32,7 @@
           <!-- this href redirects the user to their role page 
           example: If the user is a user then "redirect:/user" 
                    If the user is admin then "redirect:/admin"  -->
-          <a th:href="@{/backToAccount}" class="login">My Account</a>
+          <a th:href="@{/blog/redirectUser}" class="login">My Account</a>
         </div>
       </div>
     </header>
@@ -38,8 +45,8 @@
         >
       </div>
     </section>
-
-    <section class="about container" id="about" style="border: 1px solid red">
+    <h3 class="ternding-heading">Trending Blogs</h3>
+    <section class="about container" id="about">
       <div class="contentBx">
         <h2 class="titleText">Catch up with the trending topics</h2>
         <p class="title-text">
@@ -60,168 +67,94 @@
     </section>
 
     <div class="post-filter container">
-      <span class="filter-item active-filter" data-filter="all">All</span>
-      <span class="filter-item" data-filter="tech">Tech</span>
-      <span class="filter-item" data-filter="food">Food</span>
-      <span class="filter-item" data-filter="news">News</span>
+      <form th:action="@{'/blog/'+ ${currentPage}}" method="get">
+        <select
+          th:name="category"
+          onchange="this.form.submit()"
+          class="select-tag"
+        >
+          <option value="" hidden>Select category</option>
+          <option value="all">All</option>
+          <option value="TRAVEL">Travel</option>
+          <option value="HEALTH">Health & Wellness</option>
+          <option value="TECHNOLOGY">Technology</option>
+          <option value="lIFESTYLE">Lifestyle</option>
+          <option value="FOOD & COOKING">Food & Cooking</option>
+          <option value="PERSONAL DEVELOPMENT">Personal Development</option>
+          <option value="FINANCE & MONEY">Finance & Money</option>
+          <option value="HOME & INTERIOR">Home & Interiors</option>
+        </select>
+      </form>
     </div>
 
     <div class="post container">
       <!-- Post 1 -->
-      <div class="post-box tech">
-        <img th:src="@{/img/img1.jpg}" alt="" class="post-img" />
-        <h2 class="category">Tech</h2>
-        <a href="#" class="post-title">How to create the best UI with Figma</a>
-        <span class="post-date">12 Feb 2022</span>
-        <p class="post-description">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur,
-          similique, rerum excepturi harum, vitae facilis corrupti vel modi
-          debitis est perferendis aut quasi ea unde repudiandae iste architecto.
-          Corporis, voluptates.
-        </p>
+      <div
+        class="post-box tech"
+        th:each="blog : ${blogDto}"
+        th:onclick="|redirectToSingleBlogpage('${blog.blogId}')|"
+      >
+        <img
+          id="banner-upload responsive-img"
+          th:src="@{'data:image/png;base64,'+${blog.encoded}}"
+        />
+        <h2 class="category" th:text="${blog.category}"></h2>
+        <a
+          th:href="@{'/blogview/'+${blog.blogId}}"
+          class="post-title"
+          th:text="${blog.title}"
+        ></a>
+        <span
+          class="post-date"
+          th:text="${#dates.format(blog.date, 'dd MMM yyyy')}"
+        ></span>
+        <p class="post-description" th:text="${blog.content}"></p>
         <div class="profile">
           <img th:src="@{/img/testi1.jpg}" alt="" class="profile-img" />
-          <span class="profile-name">MKHB</span>
-        </div>
-      </div>
-      <!-- Post 2 -->
-      <div class="post-box food">
-        <img src="@{/img/img2.jpg}" alt="" class="post-img" />
-        <h2 class="category">Tech</h2>
-        <a href="#" class="post-title">How to create the best UI with Figma</a>
-        <span class="post-date">12 Feb 2022</span>
-        <p class="post-description">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur,
-          similique, rerum excepturi harum, vitae facilis corrupti vel modi
-          debitis est perferendis aut quasi ea unde repudiandae iste architecto.
-          Corporis, voluptates.
-        </p>
-        <div class="profile">
-          <img src="images/testi1.jpg" alt="" class="profile-img" />
-          <span class="profile-name">MKHB</span>
-        </div>
-      </div>
-      <!-- Post 3 -->
-      <div class="post-box food">
-        <img src="images/img3.jpg" alt="" class="post-img" />
-        <h2 class="category">Food</h2>
-        <a href="#" class="post-title">How to create the best UI with Figma</a>
-        <span class="post-date">12 Feb 2022</span>
-        <p class="post-description">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur,
-          similique, rerum excepturi harum, vitae facilis corrupti vel modi
-          debitis est perferendis aut quasi ea unde repudiandae iste architecto.
-          Corporis, voluptates.
-        </p>
-        <div class="profile">
-          <img src="images/testi1.jpg" alt="" class="profile-img" />
-          <span class="profile-name">MKHB</span>
-        </div>
-      </div>
-      <!-- Post 4 -->
-      <div class="post-box news">
-        <img src="images/img4.jpg" alt="" class="post-img" />
-        <h2 class="category">Tech</h2>
-        <a href="#" class="post-title">How to create the best UI with Figma</a>
-        <span class="post-date">12 Feb 2022</span>
-        <p class="post-description">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur,
-          similique, rerum excepturi harum, vitae facilis corrupti vel modi
-          debitis est perferendis aut quasi ea unde repudiandae iste architecto.
-          Corporis, voluptates.
-        </p>
-        <div class="profile">
-          <img src="images/testi1.jpg" alt="" class="profile-img" />
-          <span class="profile-name">MKHB</span>
-        </div>
-      </div>
-      <!-- Post 5 -->
-      <div class="post-box tech">
-        <img src="images/img5.jpg" alt="" class="post-img" />
-        <h2 class="category">Tech</h2>
-        <a href="#" class="post-title">How to create the best UI with Figma</a>
-        <span class="post-date">12 Feb 2022</span>
-        <p class="post-description">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur,
-          similique, rerum excepturi harum, vitae facilis corrupti vel modi
-          debitis est perferendis aut quasi ea unde repudiandae iste architecto.
-          Corporis, voluptates.
-        </p>
-        <div class="profile">
-          <img src="images/testi1.jpg" alt="" class="profile-img" />
-          <span class="profile-name">MKHB</span>
-        </div>
-      </div>
-      <!-- Post 6 -->
-      <div class="post-box news">
-        <img src="images/img4.jpg" alt="" class="post-img" />
-        <h2 class="category">News</h2>
-        <a href="#" class="post-title">How to create the best UI with Figma</a>
-        <span class="post-date">12 Feb 2022</span>
-        <p class="post-description">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur,
-          similique, rerum excepturi harum, vitae facilis corrupti vel modi
-          debitis est perferendis aut quasi ea unde repudiandae iste architecto.
-          Corporis, voluptates.
-        </p>
-        <div class="profile">
-          <img src="images/testi1.jpg" alt="" class="profile-img" />
-          <span class="profile-name">MKHB</span>
-        </div>
-      </div>
-      <!-- Post 7 -->
-      <div class="post-box tech">
-        <img src="images/img7.jpg" alt="" class="post-img" />
-        <h2 class="category">Tech</h2>
-        <a href="#" class="post-title">How to create the best UI with Figma</a>
-        <span class="post-date">12 Feb 2022</span>
-        <p class="post-description">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur,
-          similique, rerum excepturi harum, vitae facilis corrupti vel modi
-          debitis est perferendis aut quasi ea unde repudiandae iste architecto.
-          Corporis, voluptates.
-        </p>
-        <div class="profile">
-          <img src="images/testi1.jpg" alt="" class="profile-img" />
-          <span class="profile-name">MKHB</span>
-        </div>
-      </div>
-      <!-- Post 1 -->
-      <div class="post-box news">
-        <img src="images/img8.jpg" alt="" class="post-img" />
-        <h2 class="category">News</h2>
-        <a href="#" class="post-title">How to create the best UI with Figma</a>
-        <span class="post-date">12 Feb 2022</span>
-        <p class="post-description">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur,
-          similique, rerum excepturi harum, vitae facilis corrupti vel modi
-          debitis est perferendis aut quasi ea unde repudiandae iste architecto.
-          Corporis, voluptates.
-        </p>
-        <div class="profile">
-          <img src="images/testi1.jpg" alt="" class="profile-img" />
-          <span class="profile-name">MKHB</span>
-        </div>
-      </div>
-      <!-- Post 9 -->
-      <div class="post-box food">
-        <img src="images/img10.jpg" alt="" class="post-img" />
-        <h2 class="category">Food</h2>
-        <a href="#" class="post-title">How to create the best UI with Figma</a>
-        <span class="post-date">12 Feb 2022</span>
-        <p class="post-description">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur,
-          similique, rerum excepturi harum, vitae facilis corrupti vel modi
-          debitis est perferendis aut quasi ea unde repudiandae iste architecto.
-          Corporis, voluptates.
-        </p>
-        <div class="profile">
-          <img src="images/testi1.jpg" alt="" class="profile-img" />
-          <span class="profile-name">MKHB</span>
+          <span class="profile-name"></span>
         </div>
       </div>
     </div>
-
+    <!-- ============ Pagination Section ============ -->
+    <section class="pagination-section">
+      <nav aria-label="Page navigation example" style="margin: auto">
+        Total Items [[${totalItems}]] : Page [[${currentPage}]] of
+        [[${totalPages}]] &nbsp; &nbsp; &nbsp;
+        <ul
+          class="pagination"
+          style="display: flex; align-items: center; justify-content: center"
+        >
+          <li class="page-item" th:if="${totalPages != 1}">
+            <a
+              class="page-link"
+              th:href="@{'/blog/' + ${currentPage-1}+ '?category=' +${currentcategory}}"
+              aria-label="Previous"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li
+            class="page-item"
+            th:each="i: ${#numbers.sequence(1, totalPages)}"
+          >
+            <a
+              class="page-link"
+              th:href="@{'/blog/' + ${i}+ '?category=' + ${currentcategory}}"
+              >[[${i}]]</a
+            >
+          </li>
+          <li class="page-item" th:if="${totalPages != 1}">
+            <a
+              class="page-link"
+              th:href="@{'/blog/' + ${currentPage+1}+'?category=' + ${currentcategory}}"
+              aria-label="Next"
+            >
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </section>
     <footer>
       <div class="footer-container">
         <div class="sec aboutus">
@@ -277,7 +210,6 @@
         </div>
       </div>
     </footer>
-
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
       integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
@@ -315,6 +247,27 @@
             .removeClass("active-filter");
         });
       });
+    </script>
+    <!-- ============== script to fetch the trendingblogs -->
+    <script>
+      console.log("inside script tag");
+      fetch("/blog/trending/5")
+        .then((response) => response.json())
+        .then((data) => displaydata(data))
+        .catch((error) => console.log(error));
+
+      function displaydata(data) {
+        console.log("inside display function");
+        data.forEach((element) => {
+          console.log(element.blogId);
+        });
+      }
+
+      // ======== Window change event on clicking on blog cards =====>
+
+      function redirectToSingleBlogpage(blogId) {
+        window.location.href = "/blogview/" + blogId;
+      }
     </script>
   </body>
 </html>
