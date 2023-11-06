@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import com.blogsculpture.dto.UserSignupDTO;
 import com.blogsculpture.event.RegistrationCompleteEvent;
 import com.blogsculpture.model.User;
@@ -29,7 +28,7 @@ public class AuthController {
     @GetMapping("/registration")
     public String registerUser(Model model) {
         model.addAttribute("userDto", new UserSignupDTO());
-        return "/registration";
+        return "registration";
     }
 
     @PostMapping("/registration")

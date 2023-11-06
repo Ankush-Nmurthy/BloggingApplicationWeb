@@ -15,14 +15,18 @@ public interface UserService {
 	User findById(Integer id);
 
 	String deactivateUserAccount(Integer userid);
-	
+
 	User registerUser(UserSignupDTO user);
-	
-	String updateUser(User user,Integer id);
+
+	String updateUser(User user, Integer id);
 
 	User edit(User user);
 
 	void deleteById(Integer id);
-	
+
 	void setUsernameAndProfileImageToModel(Model model);
+
+	User findUserByUserName(String username);
+
+	void saveUser(User user);
 }

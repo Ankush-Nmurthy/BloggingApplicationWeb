@@ -1,10 +1,21 @@
 package com.blogsculpture.service;
 
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import com.blogsculpture.appconfig.CustomUser;
 import com.blogsculpture.model.Blog;
+import com.blogsculpture.model.Like;
+import com.blogsculpture.model.User;
 import com.blogsculpture.repo.BlogRepository;
+import com.blogsculpture.model.Blog.Status;
+import com.blogsculpture.model.Blog.AccessType;
 
 @Service
 public class BlogServiceImpl implements BlogService {
@@ -18,8 +29,10 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	@Override
-	public List<Blog> getBlogsByCategory(String category) {
-		return blogRepository.findByCategory(category);
+	public Page<Blog> getBlogsByCategory(String category, Integer pagenumber) {
+		System.out.println("inside get blog by category");
+		Pageable page = PageRequest.of(pagenumber, 6);
+		return blogRepository.findByCategoryOrderByDateDesc(category, page);
 	}
 
 	@Override
@@ -28,13 +41,63 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	@Override
-	public void createBlog(Blog blog) {
+	public void addBlog(Blog blog) {
 		blogRepository.save(blog);
 	}
 
 	@Override
-	public List<Blog> getAllBlogs() {
-		return blogRepository.findAll();
+	public Blog getBlog(Integer id) {
+		return blogRepository.findById(id).orElse(null);
+	}
+
+	@Override
+	public Integer getLikesForABlog(Integer blogId) {
+		Set<Like> likes = blogRepository.findAllLikesByBlogId(blogId);
+		return likes.size();
+	}
+
+	@Override
+	public List<Blog> findTopTrendingBlog(Integer limit) {
+		Pageable p = PageRequest.of(limit, 6);
+		return blogRepository.findTopTrendingBlog(p);
+	}
+
+	@Override
+	public Page<Blog> findAllBlogs(Pageable pageable) {
+		System.out.println("inside findall method");
+		Page<Blog> findAll = blogRepository.findAll(pageable);
+		return findAll;
+	}
+
+	@Override
+	public Page<Blog> findByCategoryAndAuthorUserIdOrderByDateDesc(String category, Integer authorUserId,
+			Integer pagenumber) {
+		Pageable pageable = PageRequest.of(pagenumber - 1, 3);
+		return blogRepository.findByCategoryAndAuthorUserIdOrderByDateDesc(category, authorUserId, pageable);
+	}
+
+	@Override
+	public Page<Blog> findByCategoryAndAccessTypeAndAuthorUserIdOrderByDateDesc(String category, AccessType status,
+			Integer authorUserId, Integer pagenumber) {
+		Pageable pageable = PageRequest.of(pagenumber - 1, 3);
+		return blogRepository.findByCategoryAndAccessTypeAndAuthorUserIdOrderByDateDesc(category, status, authorUserId,
+				pageable);
+	}
+
+	@Override
+	public Page<Blog> findByCategoryAndStatusAndAuthorUserIdOrderByDateDesc(String category, Status status,
+			Integer authorUserId, Integer pagenumber) {
+		Pageable pageable = PageRequest.of(pagenumber - 1, 3);
+		return blogRepository.findByCategoryAndStatusAndAuthorUserIdOrderByDateDesc(category, status, authorUserId,
+				pageable);
+	}
+
+	@Override
+	public Page<Blog> findByCategoryAndAccessTypeAndStatusAndAuthorUserIdOrderByDateDesc(String category,
+			AccessType accessType, Status status, Integer userId, Integer pagenumber) {
+		Pageable pageable = PageRequest.of(pagenumber - 1, 3);
+		return blogRepository.findByCategoryAndAccessTypeAndStatusAndAuthorUserIdOrderByDateDesc(category, accessType,
+				status, userId, pageable);
 	}
 
 }

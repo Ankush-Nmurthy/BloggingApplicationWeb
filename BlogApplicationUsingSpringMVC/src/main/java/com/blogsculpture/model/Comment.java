@@ -1,7 +1,9 @@
 package com.blogsculpture.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,19 +18,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Comment {
 
-	public enum Status {
-		COMMENTED, DELETED
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	private LocalDateTime commentedOn;
-	
-	private String comment;
 
-	private Status status;
+	private String comment;
 
 	@ManyToOne
 	@JoinColumn(name = "blog_id")
@@ -37,4 +33,23 @@ public class Comment {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Comment other = (Comment) obj;
+		return Objects.equals(blog, other.blog) && Objects.equals(comment, other.comment)
+				&& Objects.equals(id, other.id) && Objects.equals(user, other.user);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(blog, comment, id, user);
+	}
+
 }

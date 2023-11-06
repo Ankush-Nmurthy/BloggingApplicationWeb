@@ -111,6 +111,7 @@ public class AdminController {
 		return "redirect:/admin/edit";
 	}
 
+
 	// method for testing purpose.
 	@GetMapping("/persent/user")
 	@ResponseBody

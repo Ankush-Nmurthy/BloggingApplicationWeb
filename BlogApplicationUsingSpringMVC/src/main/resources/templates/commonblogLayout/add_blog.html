@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <!-- This html page is used to add the blog. -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog : Editor</title>
+    <link rel="stylesheet" th:href="@{/css/add-edit-blog.css}" />
+    <link
+      th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css}"
+      rel="stylesheet"
+    />
+    <link
+      th:href="@{https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css}"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <form
+      th:action="@{/addblog}"
+      method="post"
+      th:object="${blogEntity}"
+      enctype="multipart/form-data"
+    >
+      <div class="banner">
+        <img
+          id="display-img"
+          th:src="@{/img/DefaultBannerImage.jpg}"
+          alt="Banner Image"
+        />
+        <div class="image-upload">
+          <input
+            type="file"
+            accept="image/*"
+            id="uploadBtn"
+            name="file"
+            required
+          />
+          <label for="uploadBtn"
+            ><i class="fa-solid fa-upload"></i> Upload Banner</label
+          >
+        </div>
+      </div>
+      <div class="privacyInfo">
+        <div class="subdiv">
+          <select th:field="*{status}" required>
+            <option value="" hidden>Status</option>
+            <option value="DRAFT">DRAFT</option>
+            <option value="COMPLETED">COMPLETED</option>
+          </select>
+        </div>
+        <div class="subdiv">
+          <select th:field="*{accessType}" required>
+            <option value="" hidden>Access Type</option>
+            <option value="PUBLIC">PUBLIC</option>
+            <option value="PRIVATE">PERSONAL</option>
+          </select>
+        </div>
+        <div class="subdiv">
+          <select th:field="*{category}" name="category" required>
+            <option value="" hidden>Category</option>
+            <option value="TRAVEL">Travel</option>
+            <option value="HEALTH">Health & Wellness</option>
+            <option value="TECHNOLOGY">Technology</option>
+            <option value="lIFESTYLE">Lifestyle</option>
+            <option value="FOOD & COOKING">Food & Cooking</option>
+            <option value="PERSONAL DEVELOPMENT">Personal Development</option>
+            <option value="FINANCE & MONEY">Finance & Money</option>
+            <option value="HOME & INTERIOR">Home & Interiors</option>
+          </select>
+        </div>
+      </div>
+      <div class="blog">
+        <input
+          type="text"
+          class="title"
+          placeholder="Blog title..."
+          name="heading"
+          th:field="*{title}"
+          required
+        />
+        <textarea
+          type="text"
+          class="article"
+          placeholder="Start writing here..."
+          th:field="*{content}"
+          required
+        ></textarea>
+        <input
+          type="hidden"
+          th:field="*{content}"
+          id="editedContent"
+          name="edited-content"
+        />
+      </div>
+      <div class="blog-options">
+        <button type="submit" class="btn dark publish-btn">publish</button>
+      </div>
+    </form>
+    <script>
+      /**
+       * This script is written to append the "\n" where ever it is necessary.
+       * */
+      const textarea = document.getElementById("content");
+      const hiddenInput = document.getElementById("editedContent");
+      textarea.addEventListener("input", function () {
+        const content = textarea.value;
+        const contentWithNewlines = content.replace(/\n/g, "\\n");
+        textarea.value = contentWithNewlines;
+      });
+    </script>
+    <script>
+      const fileInput = document.getElementById("uploadBtn");
+      const imageContainer = document.querySelector(".image-upload");
+      const displayImage = document.getElementById("display-img");
+      console.log(fileInput);
+      console.log(imageContainer);
+      fileInput.addEventListener("change", function () {
+        if (fileInput.files && fileInput.files[0]) {
+          const reader = new FileReader();
+          //The reader will read the file as and when it gets the image.
+          // we hava a event that is onload when file is loaded, this event will get triggered.
+
+          reader.onload = function (e) {
+            displayImage.src = e.target.result;
+          };
+          reader.readAsDataURL(fileInput.files[0]);
+        }
+      });
+    </script>
+  </body>
+</html>

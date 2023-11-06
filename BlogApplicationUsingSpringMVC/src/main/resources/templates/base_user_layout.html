@@ -58,7 +58,7 @@
         </div>
 
         <!--logo start-->
-        <a href="index.html" class="logo"
+        <a th:href="@{/user}" class="logo"
           >Blog <span class="lite">Sculpture</span></a
         >
         <!--logo end-->
@@ -98,7 +98,9 @@
                   >
                 </li>
                 <li>
-                  <a href="/logout"><i class="icon_key_alt"></i> Log Out</a>
+                  <a th:href="@{/logout}"
+                    ><i class="icon_key_alt"></i> Log Out</a
+                  >
                 </li>
               </ul>
             </li>
@@ -115,42 +117,26 @@
           <!-- sidebar menu start-->
           <ul class="sidebar-menu">
             <li class="sub-menu">
-              <a class="" href="/user/blog">
+              <a class="" th:href="@{/blog/1?category=all}">
                 <i class="icon_house_alt"></i>
                 <span>BLOG PAGE</span>
               </a>
             </li>
             <li class="active">
-              <a class="" href="/user">
+              <a class="" th:href="@{/user}">
                 <i class="icon_menu"></i>
                 <span>DASHBOARD</span>
-              </a>
-            </li>
-            <li>
-              <a class="" href="admin/user">
-                <i class="icon_desktop"></i>
-                <!-- statistics -->
-                <span>STATISTICS</span>
               </a>
             </li>
             <li class="sub-menu">
               <a href="javascript:;" class="">
                 <i class="icon_document_alt"></i>
-                <span>MY BLOGS</span>
+                <span>BLOG SERVICE</span>
                 <span class="menu-arrow arrow_carrot-right"></span>
               </a>
               <ul class="sub">
                 <li>
-                  <a class="" href="form_validation.html">NEW BLOG</a>
-                </li>
-                <li>
-                  <a class="" href="form_component.html">PRIVATE BLOGS</a>
-                </li>
-                <li>
-                  <a class="" href="form_validation.html">PUBLIC BLOGS</a>
-                </li>
-                <li>
-                  <a class="" href="form_validation.html">DRAFT BLOGS</a>
+                  <a class="" th:href="@{/user/blogservices}">ALL BLOG</a>
                 </li>
               </ul>
             </li>
@@ -279,6 +265,14 @@
           },
         });
       });
+    </script>
+    <script>
+      function redirectToEditBlogPageUsingBlogId(blogId) {
+        window.location.href = "/editable/" + blogId;
+      }
+      function redirectToSingleBlogpage(blogId) {
+        window.location.href = "/blogview/" + blogId;
+      }
     </script>
   </body>
 </html>
