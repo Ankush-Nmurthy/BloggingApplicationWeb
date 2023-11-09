@@ -22,7 +22,7 @@
           <a th:href="@{/addblog}"
             ><button
               style="
-                padding: 5px 50px;
+                padding: 8px 30px;
                 border: transparent;
                 border-radius: 2px;
                 background-color: rgb(22, 169, 22);
@@ -61,9 +61,9 @@
         </div>
       </div>
 
-      <div class="post container">
+      <div class="postServiceParent container">
         <div
-          class="post-box tech"
+          class="tech postServiceChild"
           th:each="blog : ${blogDto}"
           th:onclick="|redirectToSingleBlogpage('${blog.blogId}')|"
         >
@@ -93,7 +93,7 @@
               padding: 5px 30px;
               border: transparent;
               border-radius: 2px;
-              background-color: rgb(64, 138, 235);
+              /* background-color: rgb(64, 138, 235); */
             "
           >
             EDIT
@@ -112,7 +112,7 @@
             <li class="page-item" th:if="${totalPages != 1}">
               <a
                 class="page-link"
-                th:href="@{'/blogservices/' + ${currentPage-1}+ '?category=' +${currentcategory}}"
+                th:href="@{'/blogservices/' + ${currentPage-1}+ '?category=' +${currentcategory} + '&accesstype=' +${currentaccessType} + '&status=' + ${currentstatus}}"
                 aria-label="Previous"
               >
                 <span aria-hidden="true">&laquo;</span>
@@ -124,14 +124,14 @@
             >
               <a
                 class="page-link"
-                th:href="@{'/blog/' + ${i}+ '?category=' + ${currentcategory}}"
+                th:href="@{'/blogservices/' + ${i}+ '?category=' +${currentcategory} + '&accesstype=' +${currentaccesstype} + '&status=' + ${currentstatus}}"
                 >[[${i}]]</a
               >
             </li>
             <li class="page-item" th:if="${totalPages != 1}">
               <a
                 class="page-link"
-                th:href="@{'/blogservices/' + ${currentPage+1}+'?category=' + ${currentcategory}}"
+                th:href="@{'/blogservices/' + ${currentPage+1}+ '?category=' +${currentcategory} + '&accesstype=' +${currentaccessType} + '&status=' + ${currentstatus}}"
                 aria-label="Next"
               >
                 <span aria-hidden="true">&raquo;</span>

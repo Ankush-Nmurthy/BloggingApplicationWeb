@@ -87,7 +87,7 @@
                     th:src="@{/img/imageAvatar.jpg}"
                   />
                 </span>
-                <span th:text="${username}" class="username">Guest</span>
+                <span th:text="${username}" class="username">User</span>
               </a>
               <ul class="dropdown-menu extended logout">
                 <div class="log-arrow-up"></div>
@@ -123,7 +123,13 @@
           <!-- sidebar menu start-->
           <ul class="sidebar-menu">
             <!-- <i class="icon_menu"></i> dashboard icon -->
-            <li class="active">
+            <li class="sub-menu">
+              <a class="" th:href="@{/blog/1?category=all}">
+                <i class="icon_house_alt"></i>
+                <span>BLOG PAGE</span>
+              </a>
+            </li>
+            <li class="sub-menu">
               <a class="" th:href="@{/admin}">
                 <i class="icon_house_alt"></i>
                 <span>Dashboard</span>
@@ -147,21 +153,16 @@
             <li class="sub-menu">
               <a href="javascript:;" class="">
                 <i class="icon_document_alt"></i>
-                <span>MY BLOGS</span>
+                <span>BLOG SERVICE</span>
                 <span class="menu-arrow arrow_carrot-right"></span>
               </a>
               <ul class="sub">
                 <li>
-                  <a class="" href="form_validation.html">NEW BLOG</a>
-                </li>
-                <li>
-                  <a class="" href="form_component.html">PRIVATE BLOGS</a>
-                </li>
-                <li>
-                  <a class="" href="form_validation.html">PUBLIC BLOGS</a>
-                </li>
-                <li>
-                  <a class="" href="form_validation.html">DRAFT BLOGS</a>
+                  <a
+                    class=""
+                    th:href="@{/blogservices/1?category=all&accesstype=null&status=null}"
+                    >ALL BLOGS
+                  </a>
                 </li>
               </ul>
             </li>

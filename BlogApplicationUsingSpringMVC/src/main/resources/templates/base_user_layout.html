@@ -122,7 +122,7 @@
                 <span>BLOG PAGE</span>
               </a>
             </li>
-            <li class="active">
+            <li class="sub-menu">
               <a class="" th:href="@{/user}">
                 <i class="icon_menu"></i>
                 <span>DASHBOARD</span>
@@ -136,7 +136,11 @@
               </a>
               <ul class="sub">
                 <li>
-                  <a class="" th:href="@{/user/blogservices}">ALL BLOG</a>
+                  <a
+                    class=""
+                    th:href="@{/blogservices/1?category=all&accesstype=null&status=null}"
+                    >ALL BLOG</a
+                  >
                 </li>
               </ul>
             </li>

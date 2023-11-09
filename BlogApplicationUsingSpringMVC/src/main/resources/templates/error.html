@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="shortcut icon" th:href="@{/img/favicon.png}" />
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
-    <link th:href="@{css/bootstrap-theme.css}" rel="stylesheet" />
-    <link th:href="@{/css/elegant-icons-style.css}" rel="stylesheet" />
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="utf-8"/>
+    <link rel="shortcut icon" th:href="@{/img/favicon.png}"/>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{css/bootstrap-theme.css}" rel="stylesheet"/>
+    <link th:href="@{/css/elegant-icons-style.css}" rel="stylesheet"/>
     <link
-      th:href="@{/assets/font-awesome/css/font-awesome.css}"
-      rel="stylesheet"
+            th:href="@{/assets/font-awesome/css/font-awesome.css}"
+            rel="stylesheet"
     />
     <title>Error Page</title>
-    <link th:href="@{/css/style.css}" rel="stylesheet" />
-    <link th:href="@{/css/style-responsive.css}" rel="stylesheet" />
-  </head>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style-responsive.css}" rel="stylesheet"/>
+</head>
 
-  <body>
-    <div class="page-404">
-      <p class="text-404">404</p>
+<body>
+<div class="page-404">
+    <p class="text-404">404</p>
 
-      <h2>Aww Snap!</h2>
-      <p>
-        Something went wrong or that page doesn’t exist yet. <br /><a
-          th:href="@{/blog/redirectUser}"
-          >Return Home</a
-        >
-      </p>
-    </div>
-  </body>
+    <h2>Aww Snap!</h2>
+    <p th:text="${message}">
+        Something went wrong or that page doesn’t exist yet. <br/><a
+            th:href="@{/blog/redirectUser}"
+    >Return Home</a
+    >
+    </p>
+</div>
+</body>
 </html>
