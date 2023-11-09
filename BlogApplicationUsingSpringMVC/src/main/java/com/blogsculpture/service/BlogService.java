@@ -27,6 +27,8 @@ public interface BlogService {
 	Page<Blog> getBlogsByCategory(String category, Integer limit);
 
 	// These methods are used in User and Admin section.
+	Page<Blog> findByAuthorUserIdOrderByDateDesc(Integer authorUserId, Pageable pageable);
+
 	Page<Blog> findByCategoryAndAuthorUserIdOrderByDateDesc(String category, Integer authorUserId, Integer pagenumber);
 
 	Page<Blog> findByCategoryAndAccessTypeAndAuthorUserIdOrderByDateDesc(String category, Blog.AccessType status,

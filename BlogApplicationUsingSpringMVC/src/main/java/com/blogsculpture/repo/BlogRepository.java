@@ -22,6 +22,7 @@ public interface BlogRepository extends JpaRepository<Blog, Integer> {
 	@Query("SELECT b FROM Blog b ORDER BY SIZE(b.likes) DESC")
 	List<Blog> findTopTrendingBlog(Pageable pageable);
 
+//	This method is used in view-page[blog_page.html]
 	Page<Blog> findByCategoryOrderByDateDesc(String category, Pageable pageable);
 
 	// TODO ==> should be corrected again.
@@ -39,6 +40,9 @@ public interface BlogRepository extends JpaRepository<Blog, Integer> {
 //	Page<Blog> findLoggedInUsersPrivateOrPublicBlogsAndCompletedOrDraftedBlogs(@Param("access") AccessType access,
 //			@Param("status") Status status, @Param("category") String category, @Param("userId") Integer userId,
 //			Pageable page);
+
+	//1. findAllBlogs of user who logged in to the account.
+	Page<Blog> findByAuthorUserIdOrderByDateDesc(Integer authorUserId, Pageable pageable);
 
 	// 2. only category;
 	Page<Blog> findByCategoryAndAuthorUserIdOrderByDateDesc(String category, Integer authorUserId, Pageable pageable);
