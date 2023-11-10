@@ -33,7 +33,7 @@ public class LikeServiceImpl implements LikeService {
 		Blog blog = blogRepository.findById(blogId)
 				.orElseThrow(() -> new BlogExceptions("Blog Not found for the given Blog ID"));
 		boolean userAlreadyLiked = user.getLikes().stream().anyMatch((e) -> e.getBlog().getBlogId() == blogId);
-		System.out.println(userAlreadyLiked);
+		// System.out.println(userAlreadyLiked);
 		if (!userAlreadyLiked) {
 			Like like = new Like();
 			like.setBlog(blog);
@@ -65,10 +65,10 @@ public class LikeServiceImpl implements LikeService {
 		if (!list.isEmpty()) {
 			Like like = list.get(0);
 			boolean removeIf = blog.getLikes().removeIf((likes) -> Objects.equals(likes.getId(), like.getId()));
-			System.out.println(removeIf);
+			// System.out.println(removeIf);
 			removeIf = user.getLikes().removeIf((likes) -> Objects.equals(likes.getId(), like.getId()));
-			System.out.println(removeIf);
-			System.out.println(user.getLikes());
+			// System.out.println(removeIf);
+			// System.out.println(user.getLikes());
 			likeRepository.deleteById(like.getId());
 			blogRepository.save(blog);
 			userRepository.save(user);

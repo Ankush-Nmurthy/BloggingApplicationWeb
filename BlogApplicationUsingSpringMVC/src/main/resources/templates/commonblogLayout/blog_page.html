@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
   <head>
+    <title>Blog page</title>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trend Blogger</title>
+    <title>Blog-Sculpture</title>
     <!-- Box-icon -->
     <link
       th:href="@{https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css}"
@@ -111,7 +112,7 @@
         <p class="post-description" th:text="${blog.content}"></p>
         <div class="profile">
           <img th:src="@{/img/testi1.jpg}" alt="" class="profile-img" />
-          <span class="profile-name"></span>
+          <p th:text="${blog.author.name}" class="profile-name"></p>
         </div>
       </div>
     </div>
@@ -192,18 +193,12 @@
           <ul class="info">
             <li>
               <span><i class="bx bxs-map"></i></span>
-              <span
-                >6444 London street <br />
-                Brighton PA 33445 <br />
-                Uk</span
-              >
+              <span>Banglore, Karnataka </span>
             </li>
             <li>
               <span><i class="bx bx-envelope"></i></span>
               <p>
-                <a href="mailto:codemyhobby9@gmail.com"
-                  >Codemyhobby9@gmail.com</a
-                >
+                <a href="ankushn566@gmail.com">ankushn566@gmail.com</a>
               </p>
             </li>
           </ul>

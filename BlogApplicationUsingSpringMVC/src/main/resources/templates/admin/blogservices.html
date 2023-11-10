@@ -9,7 +9,7 @@
   </head>
   <body style="background: white">
     <div layout:fragment="content">
-      <h4>Blog Services</h4>
+      <!-- <h4>Blog Services</h4> -->
       <div
         class="post-filter container"
         style="
@@ -46,17 +46,19 @@
               <option value="FINANCE & MONEY">Finance & Money</option>
               <option value="HOME & INTERIOR">Home & Interiors</option>
             </select>
-            <select th:name="accesstype" id="accesstype">
+            <select th:name="accesstype" id="accesstype" class="accesstype">
               <option value="null" hidden>Access Type</option>
               <option value="PUBLIC">PUBLIC</option>
               <option value="PRIVATE">PERSONAL</option>
             </select>
-            <select th:name="status" id="status">
+            <select th:name="status" id="status" class="status">
               <option value="null" hidden>Status</option>
               <option value="DRAFT">DRAFT</option>
               <option value="COMPLETED">COMPLETED</option>
             </select>
-            <button type="submit"><i class="bi bi-search"></i>Search</button>
+            <button id="search" type="submit">
+              <i class="bi bi-search"></i>Search
+            </button>
           </form>
         </div>
       </div>
@@ -93,7 +95,7 @@
               padding: 5px 30px;
               border: transparent;
               border-radius: 2px;
-              /* background-color: rgb(64, 138, 235); */
+              background-color: #007aff;
             "
           >
             EDIT

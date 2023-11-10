@@ -54,7 +54,7 @@ public class AdminServiceImpl implements AdminService {
 	public String updateUserRoleToAdmin(Integer userId) {
 		Optional<User> userById = userRepository.findById(userId);
 		String role = userById.get().getRole().equals("ROLE_ADMIN") ? "ROLE_USER" : "ROLE_ADMIN";
-		System.out.println(role);
+		// System.out.println(role);
 		userById.get().setRole(role);
 		userById.get().setUpdatedAt(LocalDateTime.now());
 		userRepository.save(userById.get());

@@ -3,13 +3,15 @@
   lang="en"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="base_user_layout"
+  xmlns:th="http://www.w3.org/1999/xhtml"
 >
   <head>
+    <title>Blog Services</title>
     <link rel="stylesheet" th:href="@{/css/blogservices.css}" />
   </head>
   <body style="background: white">
     <div layout:fragment="content">
-      <h4>Blog Services</h4>
+      <!--      <h4>Blog Services</h4>-->
       <div
         class="post-filter container"
         style="
