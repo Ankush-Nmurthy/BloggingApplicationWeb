@@ -12,7 +12,7 @@ public class RedirectController {
 
 	@RequestMapping("/redirectUserBasedOnRole")
 	public String redirectUserBasedOnRole(Authentication authentication) {
-		System.out.println("inside RedirectController class");
+		// System.out.println("inside RedirectController class");
 		if (authentication != null) {
 			Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 			if (authorities.stream().anyMatch((auth) -> auth.getAuthority().equals("ROLE_ADMIN"))) {

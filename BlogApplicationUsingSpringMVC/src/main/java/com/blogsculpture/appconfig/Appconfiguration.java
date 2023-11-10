@@ -18,52 +18,55 @@ import nz.net.ultraq.thymeleaf.LayoutDialect;
 @EnableWebSecurity
 public class Appconfiguration {
 
-	@Autowired
-	private UserDetailsService userDetailsService;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-		http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-				.requestMatchers("/admin/**").hasRole("ADMIN")
-				.requestMatchers("/login").permitAll()
-				.requestMatchers("/registration").permitAll()
-				.requestMatchers("/check").authenticated()
-				.anyRequest().authenticated())
-				.csrf(csrf -> csrf.disable())
-				.formLogin(log -> log.loginPage("/login")
-						.loginProcessingUrl("/login")
-						.defaultSuccessUrl("/redirectUserBasedOnRole")
-						.failureUrl("/login?error=true")
-						.permitAll()
+        http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/login").permitAll()
+                .requestMatchers("/registration").permitAll()
+                .requestMatchers("/check").authenticated()
+                .requestMatchers("/blogsculpture", "/blog/**", "/css/**", "/img/**", "/assets/**", "/fonts/**",
+                        "/js/**")
+                .permitAll()
+                .anyRequest().authenticated())
+                .csrf(csrf -> csrf.disable())
+                .formLogin(log -> log.loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/redirectUserBasedOnRole")
+                        .failureUrl("/login?error=true")
+                        .permitAll()
 
-				).logout(log -> log.logoutUrl("/logout")
-						.logoutSuccessUrl("/login?logout")
-						.invalidateHttpSession(true));
+                ).logout(log -> log.logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .invalidateHttpSession(true));
 
-		return http.build();
-	}
+        return http.build();
+    }
 
-	@Bean
-	public DaoAuthenticationProvider getAuthenticationProvider() {
-		System.out.println("inside the Dao authentication.");
-		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-		return daoAuthenticationProvider;
-	}
+    @Bean
+    public DaoAuthenticationProvider getAuthenticationProvider() {
+        // System.out.println("inside the Dao authentication.");
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
+    }
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	public void configure(AuthenticationManagerBuilder builder) throws Exception {
-		builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-	}
+    public void configure(AuthenticationManagerBuilder builder) throws Exception {
+        builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
 
-	@Bean
-	public LayoutDialect layoutDialect() {
-		return new LayoutDialect();
-	}
+    @Bean
+    public LayoutDialect layoutDialect() {
+        return new LayoutDialect();
+    }
 }

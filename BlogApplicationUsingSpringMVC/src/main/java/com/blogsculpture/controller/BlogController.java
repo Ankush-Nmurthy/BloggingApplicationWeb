@@ -47,14 +47,15 @@ public class BlogController {
 
     // for this end point there is no need to get authenticated and ie (no login
     // needed).
-    @GetMapping("/")
+    @GetMapping("/blogsculpture")
     public String homeBlogPageHandler() {
-        return "commonblogLayout/blogIndex";
+        System.out.println("Inside the local maping.");
+        return "redirect:/blog/0?category=all";
     }
 
     @GetMapping("/blog/redirectUser")
     public String redirectUserToAccountFromBlogPage(Authentication authentication) {
-        System.out.println("inside blog/redirestUser class");
+        // System.out.println("inside blog/redirestUser class");
         if (authentication != null) {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             if (authorities.stream().anyMatch((auth) -> auth.getAuthority().equals("ROLE_ADMIN"))) {
@@ -74,7 +75,7 @@ public class BlogController {
 
     @PostMapping("/addblog")
     public String createNewBlog(@RequestParam("file") MultipartFile file, @ModelAttribute("blogEntity") Blog blogEntity,
-                                @RequestParam("content") String content) {
+            @RequestParam("content") String content) {
         CustomUser loggedInUser = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = loggedInUser.getUser();
         try {
@@ -114,8 +115,8 @@ public class BlogController {
 
     @PostMapping("/editBlog/{id}")
     public String editBlogByBlogId(@RequestParam("file") MultipartFile file,
-                                   @ModelAttribute("blogEntity") Blog blogEntity, @RequestParam("content") String content,
-                                   @PathVariable Integer id) {
+            @ModelAttribute("blogEntity") Blog blogEntity, @RequestParam("content") String content,
+            @PathVariable Integer id) {
         Blog blogEntity2 = blogService.getBlog(id);
         CustomUser loggedInUser = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = loggedInUser.getUser();
@@ -145,7 +146,8 @@ public class BlogController {
     // 2. blogIndex(which can accessed without login);
     @GetMapping("/blog/{currentPage}")
     public String getCategory(@RequestParam("category") String category, @PathVariable Integer currentPage,
-                              Model model) {
+            Model model) {
+        System.out.println("inside get category method");
         if (currentPage == null || currentPage <= 0) {
             currentPage = 1;
         }
@@ -155,16 +157,23 @@ public class BlogController {
         if (page.isEmpty())
             throw new NotFoundException("Content for this page is empty!");
 
-        List<Blog> perPageBlogs = page.getContent().stream().peek(e -> e.setEncoded(Base64.getEncoder().encodeToString(e.getData()))).collect(Collectors.toList());
+        List<Blog> perPageBlogs = page.getContent().stream()
+                .peek(e -> e.setEncoded(Base64.getEncoder().encodeToString(e.getData()))).collect(Collectors.toList());
 
-        System.out.println(perPageBlogs.size());
+        // System.out.println(perPageBlogs.size());
 
         model.addAttribute("blogDto", perPageBlogs);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
         model.addAttribute("currentcategory", category);
-        return "commonblogLayout/blog_page";
+
+        String User = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (!SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser")) {
+            return "commonblogLayout/blog_page";
+        }
+        return "commonblogLayout/blogIndex";
     }
 
     @GetMapping("/blog/trending/{limit}")
@@ -176,8 +185,8 @@ public class BlogController {
     // http://localhost:9090/blogservices/1?category=all&accesstype=null&status=null
     @GetMapping("/blogservices/{currentpage}")
     public String getBlogServicesPage(Model model, @PathVariable("currentpage") Integer currentPage,
-                                      @RequestParam(required = false) String category, @RequestParam(required = false) String accesstype,
-                                      @RequestParam(required = false) String status) {
+            @RequestParam(required = false) String category, @RequestParam(required = false) String accesstype,
+            @RequestParam(required = false) String status) {
 
         // using the current logged in user in-order to get his
         // blog's and to display on his user dash-board.
@@ -193,30 +202,41 @@ public class BlogController {
             currentPage = 1;
         }
 
-        //TODO ==> test and expected = 1st method;
+        // TODO ==> test and expected = 1st method;
 
         // debugging;
-        System.out.println("accessTypeEnum : " + accessTypeEnum + " statusEnum : " + statusEnum + " Category : "
-                + category + " currentPage : " + currentPage);
+        // System.out.println("accessTypeEnum : " + accessTypeEnum + " statusEnum : " +
+        // statusEnum + " Category : "
+        // + category + " currentPage : " + currentPage);
 
-        if ((category.equals("all") || (category.equals("null"))) && (accessTypeEnum == AccessType.UNKNOWN && statusEnum == Status.UNKNOWN)) {
+        if ((category.equals("all") || (category.equals("null")))
+                && (accessTypeEnum == AccessType.UNKNOWN && statusEnum == Status.UNKNOWN)) {
             Pageable pageable = PageRequest.of(currentPage - 1, 3);
-            System.out.println("inside : findByAuthorUserIdOrderByDateDesc method-1");
+            // System.out.println("inside : findByAuthorUserIdOrderByDateDesc method-1");
             page = blogService.findByAuthorUserIdOrderByDateDesc(user.getUserId(), pageable);
         } else {
             if (!category.equals("null")) {
                 if (accessTypeEnum != AccessType.UNKNOWN && statusEnum != Status.UNKNOWN) {
-                    System.out.println("inside : findByCategoryAndAccessTypeAndStatusAndAuthorUserIdOrderByDateDesc method-2");
-                    page = blogService.findByCategoryAndAccessTypeAndStatusAndAuthorUserIdOrderByDateDesc(category, accessTypeEnum, statusEnum, user.getUserId(), currentPage);
+                    // System.out.println("inside :
+                    // findByCategoryAndAccessTypeAndStatusAndAuthorUserIdOrderByDateDesc
+                    // method-2");
+                    page = blogService.findByCategoryAndAccessTypeAndStatusAndAuthorUserIdOrderByDateDesc(category,
+                            accessTypeEnum, statusEnum, user.getUserId(), currentPage);
                 } else if (accessTypeEnum != AccessType.UNKNOWN) {
-                    System.out.println("inside : findByCategoryAndAccessTypeAndAuthorUserIdOrderByDateDesc method-3");
-                    page = blogService.findByCategoryAndAccessTypeAndAuthorUserIdOrderByDateDesc(category, accessTypeEnum, user.getUserId(), currentPage);
+                    // System.out.println("inside :
+                    // findByCategoryAndAccessTypeAndAuthorUserIdOrderByDateDesc method-3");
+                    page = blogService.findByCategoryAndAccessTypeAndAuthorUserIdOrderByDateDesc(category,
+                            accessTypeEnum, user.getUserId(), currentPage);
                 } else if (statusEnum != Status.UNKNOWN) {
-                    System.out.println("inside : findByCategoryAndStatusAndAuthorUserIdOrderByDateDesc method-4");
-                    page = blogService.findByCategoryAndStatusAndAuthorUserIdOrderByDateDesc(category, statusEnum, user.getUserId(), currentPage);
+                    // System.out.println("inside :
+                    // findByCategoryAndStatusAndAuthorUserIdOrderByDateDesc method-4");
+                    page = blogService.findByCategoryAndStatusAndAuthorUserIdOrderByDateDesc(category, statusEnum,
+                            user.getUserId(), currentPage);
                 } else {
-                    System.out.println("inside : findByCategoryAndAuthorUserIdOrderByDateDesc method-5");
-                    page = blogService.findByCategoryAndAuthorUserIdOrderByDateDesc(category, user.getUserId(), currentPage);
+                    // System.out.println("inside : findByCategoryAndAuthorUserIdOrderByDateDesc
+                    // method-5");
+                    page = blogService.findByCategoryAndAuthorUserIdOrderByDateDesc(category, user.getUserId(),
+                            currentPage);
                 }
             }
         }
@@ -225,9 +245,10 @@ public class BlogController {
             throw new NotFoundException("Content for this page is empty!");
         }
 
-        List<Blog> perPageBlogs = page.getContent().stream().peek(e -> e.setEncoded(Base64.getEncoder().encodeToString(e.getData()))).collect(Collectors.toList());
+        List<Blog> perPageBlogs = page.getContent().stream()
+                .peek(e -> e.setEncoded(Base64.getEncoder().encodeToString(e.getData()))).collect(Collectors.toList());
 
-        System.out.println(perPageBlogs.size());
+        // System.out.println(perPageBlogs.size());
 
         model.addAttribute("blogDto", perPageBlogs);
         model.addAttribute("currentPage", currentPage);
@@ -236,6 +257,9 @@ public class BlogController {
         model.addAttribute("currentcategory", category);
         model.addAttribute("currentaccesstype", accesstype);
         model.addAttribute("currentstatus", status);
+        if (loggedInUser.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+            return "admin/blogservices";
+        }
         return "user/blogservices";
     }
 

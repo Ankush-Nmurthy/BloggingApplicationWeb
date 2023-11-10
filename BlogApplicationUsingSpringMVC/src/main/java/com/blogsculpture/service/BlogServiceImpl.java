@@ -31,7 +31,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public Page<Blog> getBlogsByCategory(String category, Integer pagenumber) {
-        System.out.println("inside get blog by category");
+        // System.out.println("inside get blog by category");
         Pageable page = PageRequest.of(pagenumber, 6);
         return blogRepository.findByCategoryOrderByDateDesc(category, page);
     }
@@ -65,7 +65,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public Page<Blog> findAllBlogs(Pageable pageable) {
-        System.out.println("inside findall method");
+        // System.out.println("inside findall method");
         Page<Blog> findAll = blogRepository.findAll(pageable);
         return findAll;
     }
