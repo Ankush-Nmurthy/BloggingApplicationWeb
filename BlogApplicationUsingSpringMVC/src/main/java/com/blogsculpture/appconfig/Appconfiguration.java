@@ -75,7 +75,7 @@ public class Appconfiguration {
     @Bean
     protected InMemoryUserDetailsManager inmemoryuser() {
         InMemoryUserDetailsManager details = new InMemoryUserDetailsManager();
-        UserDetails admin = User.withUsername("admin@gmail.com").password("12345").roles("ROLE_ADMIN").build();
+        UserDetails admin = User.withUsername("admin@gmail.com").password("12345").roles("ADMIN").build();
         details.createUser(admin);
         return details;
     }
