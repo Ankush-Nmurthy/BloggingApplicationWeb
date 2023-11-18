@@ -24,7 +24,7 @@ public class CommentServiceImpl implements CommentService {
 	private CommentRepository commentRepository;
 
 	@Override
-	public String addCommentForABlog(Integer blogId, String comment, User user){
+	public String addCommentForABlog(Integer blogId, String comment, User user) {
 		Blog blog = blogRepository.findById(blogId)
 				.orElseThrow(() -> new BlogExceptions("Blog Not found for the given Blog ID"));
 		Comment newComment = new Comment();

@@ -46,7 +46,7 @@ public class UserController {
 	public String updateUser(@ModelAttribute("userDto") User userDto, Model model) {
 		userService.setUsernameAndProfileImageToModel(model);
 		userService.updateUser(userDto, userDto.getUserId());
-		return "redirect:user/edit";
+		return "redirect:/user/edit";
 	}
 
 

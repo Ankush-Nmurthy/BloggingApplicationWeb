@@ -25,7 +25,7 @@ public class LikeController {
 	public String likeABlog(@PathVariable Integer id) {
 		CustomUser authUser = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		likeService.likeABlog(id, authUser.getUser());
-		return "redirect:blogview/"+id;
+		return "redirect:/blogview/"+id;
 	}
 
 	@PostMapping("/blog/dislike/{id}")
@@ -33,7 +33,7 @@ public class LikeController {
 	public String dislikeABlog(@PathVariable Integer id) {
 		CustomUser authUser = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		likeService.dislikeABlog(id, authUser.getUser());
-		return "redirect:blogview/" + id;
+		return "redirect:/blogview/" + id;
 	}
 
 }

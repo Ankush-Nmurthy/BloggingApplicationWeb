@@ -35,6 +35,6 @@ public class AuthController {
     public String registerUser(@ModelAttribute("userDto") UserSignupDTO userDto, Model model) {
         User user = userService.registerUser(userDto);
         publisher.publishEvent(new RegistrationCompleteEvent(user, ""));
-        return "redirect:registration?success";
+        return "redirect:/registration?success";
     }
 }

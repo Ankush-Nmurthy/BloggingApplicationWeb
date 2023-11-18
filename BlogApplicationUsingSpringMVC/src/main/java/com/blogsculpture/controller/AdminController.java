@@ -61,9 +61,9 @@ public class AdminController {
 		adminService.deactivateUserAccount(id);
 		User user = userService.findById(id);
 		if (user.getRole().equals("ROLE_ADMIN")) {
-			return "redirect:admin/admins";
+			return "redirect:/admin/admins";
 		}
-		return "redirect:admin/users";
+		return "redirect:/admin/users";
 	}
 
 	@RequestMapping(value = "/admin/activateaccount/{id}", method = { RequestMethod.GET })
@@ -72,9 +72,9 @@ public class AdminController {
 		adminService.activateUserAccount(id);
 		User user = userService.findById(id);
 		if (user.getRole().equals("ROLE_ADMIN")) {
-			return "redirect:admin/admins";
+			return "redirect:/admin/admins";
 		}
-		return "redirect:admin/users";
+		return "redirect:/admin/users";
 	}
 
 	@GetMapping(value = "/admin/toggelRole/{id}")
@@ -83,14 +83,14 @@ public class AdminController {
 		adminService.updateUserRoleToAdmin(id);
 		User user = userService.findById(id);
 		if (user.getRole().equals("ROLE_ADMIN")) {
-			return "redirect:admin/users";
+			return "redirect:/admin/users";
 		}
-		return "redirect:admin/admins";
+		return "redirect:/admin/admins";
 	}
 
 	@GetMapping("/admin/blog")
 	public String getBlogPage() {
-		return "/admin/blog_page";
+		return "admin/blog_page";
 	}
 
 	@GetMapping("/admin/edit")
@@ -107,7 +107,7 @@ public class AdminController {
 	public String updateUser(@ModelAttribute("userDto") User userDto, Model model) {
 		userService.setUsernameAndProfileImageToModel(model);
 		userService.updateUser(userDto, userDto.getUserId());
-		return "redirect:admin/edit";
+		return "redirect:/admin/edit";
 	}
 
 
