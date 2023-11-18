@@ -7,11 +7,13 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 @Configuration
@@ -29,7 +31,7 @@ public class Appconfiguration {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/registration").permitAll()
                         .requestMatchers("/check").authenticated()
-                        .requestMatchers("/blogsculpture","/", "/blog/**", "/css/**", "/img/**", "/assets/**", "/fonts/**",
+                        .requestMatchers("/blogsculpture", "/", "/blog/**", "/css/**", "/img/**", "/assets/**", "/fonts/**",
                                 "/js/**")
                         .permitAll()
                         .anyRequest().authenticated())
@@ -68,5 +70,13 @@ public class Appconfiguration {
     @Bean
     public LayoutDialect layoutDialect() {
         return new LayoutDialect();
+    }
+
+    @Bean
+    protected InMemoryUserDetailsManager inmemoryuser() {
+        InMemoryUserDetailsManager details = new InMemoryUserDetailsManager();
+        UserDetails admin = User.withUsername("admin@gmail.com").password("12345").roles("ROLE_ADMIN").build();
+        details.createUser(admin);
+        return details;
     }
 }
