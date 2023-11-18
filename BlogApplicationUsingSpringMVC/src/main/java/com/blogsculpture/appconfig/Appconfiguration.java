@@ -25,14 +25,15 @@ public class Appconfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/login").permitAll()
-                .requestMatchers("/registration").permitAll()
-                .requestMatchers("/check").authenticated()
-                .requestMatchers("/blogsculpture", "/blog/**", "/css/**", "/img/**", "/assets/**", "/fonts/**",
-                        "/js/**")
-                .permitAll()
-                .anyRequest().authenticated())
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/registration").permitAll()
+                        .requestMatchers("/check").authenticated()
+                        .requestMatchers("/blogsculpture", "/blog/**", "/css/**", "/img/**", "/assets/**", "/fonts/**",
+                                "/js/**")
+                        .permitAll()
+                        .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
                 .formLogin(log -> log.loginPage("/login")
                         .loginProcessingUrl("/login")

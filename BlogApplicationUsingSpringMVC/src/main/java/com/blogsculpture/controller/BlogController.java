@@ -40,22 +40,20 @@ public class BlogController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/index")
+    @GetMapping("/")
     public String getIndexPageOfWebApplication() {
-        return "/index";
+        return "redirect:/blog/0?category=all";
     }
 
     // for this end point there is no need to get authenticated and ie (no login
     // needed).
     @GetMapping("/blogsculpture")
     public String homeBlogPageHandler() {
-        System.out.println("Inside the local maping.");
         return "redirect:/blog/0?category=all";
     }
 
     @GetMapping("/blog/redirectUser")
     public String redirectUserToAccountFromBlogPage(Authentication authentication) {
-        // System.out.println("inside blog/redirestUser class");
         if (authentication != null) {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             if (authorities.stream().anyMatch((auth) -> auth.getAuthority().equals("ROLE_ADMIN"))) {
@@ -160,8 +158,6 @@ public class BlogController {
         List<Blog> perPageBlogs = page.getContent().stream()
                 .peek(e -> e.setEncoded(Base64.getEncoder().encodeToString(e.getData()))).collect(Collectors.toList());
 
-        // System.out.println(perPageBlogs.size());
-
         model.addAttribute("blogDto", perPageBlogs);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("totalPages", page.getTotalPages());
@@ -202,39 +198,22 @@ public class BlogController {
             currentPage = 1;
         }
 
-        // TODO ==> test and expected = 1st method;
-
-        // debugging;
-        // System.out.println("accessTypeEnum : " + accessTypeEnum + " statusEnum : " +
-        // statusEnum + " Category : "
-        // + category + " currentPage : " + currentPage);
-
         if ((category.equals("all") || (category.equals("null")))
                 && (accessTypeEnum == AccessType.UNKNOWN && statusEnum == Status.UNKNOWN)) {
             Pageable pageable = PageRequest.of(currentPage - 1, 3);
-            // System.out.println("inside : findByAuthorUserIdOrderByDateDesc method-1");
             page = blogService.findByAuthorUserIdOrderByDateDesc(user.getUserId(), pageable);
         } else {
             if (!category.equals("null")) {
                 if (accessTypeEnum != AccessType.UNKNOWN && statusEnum != Status.UNKNOWN) {
-                    // System.out.println("inside :
-                    // findByCategoryAndAccessTypeAndStatusAndAuthorUserIdOrderByDateDesc
-                    // method-2");
                     page = blogService.findByCategoryAndAccessTypeAndStatusAndAuthorUserIdOrderByDateDesc(category,
                             accessTypeEnum, statusEnum, user.getUserId(), currentPage);
                 } else if (accessTypeEnum != AccessType.UNKNOWN) {
-                    // System.out.println("inside :
-                    // findByCategoryAndAccessTypeAndAuthorUserIdOrderByDateDesc method-3");
                     page = blogService.findByCategoryAndAccessTypeAndAuthorUserIdOrderByDateDesc(category,
                             accessTypeEnum, user.getUserId(), currentPage);
                 } else if (statusEnum != Status.UNKNOWN) {
-                    // System.out.println("inside :
-                    // findByCategoryAndStatusAndAuthorUserIdOrderByDateDesc method-4");
                     page = blogService.findByCategoryAndStatusAndAuthorUserIdOrderByDateDesc(category, statusEnum,
                             user.getUserId(), currentPage);
                 } else {
-                    // System.out.println("inside : findByCategoryAndAuthorUserIdOrderByDateDesc
-                    // method-5");
                     page = blogService.findByCategoryAndAuthorUserIdOrderByDateDesc(category, user.getUserId(),
                             currentPage);
                 }
@@ -247,8 +226,6 @@ public class BlogController {
 
         List<Blog> perPageBlogs = page.getContent().stream()
                 .peek(e -> e.setEncoded(Base64.getEncoder().encodeToString(e.getData()))).collect(Collectors.toList());
-
-        // System.out.println(perPageBlogs.size());
 
         model.addAttribute("blogDto", perPageBlogs);
         model.addAttribute("currentPage", currentPage);
