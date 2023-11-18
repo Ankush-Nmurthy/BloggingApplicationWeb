@@ -16,12 +16,12 @@ public class RedirectController {
 		if (authentication != null) {
 			Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 			if (authorities.stream().anyMatch((auth) -> auth.getAuthority().equals("ROLE_ADMIN"))) {
-				return "redirect:/admin";
+				return "redirect:admin";
 			} else if (authorities.stream().anyMatch((auth) -> auth.getAuthority().equals("ROLE_USER"))) {
-				return "redirect:/user";
+				return "redirect:user";
 			}
 		}
-		return "/login";
+		return "login";
 	}
 
 }

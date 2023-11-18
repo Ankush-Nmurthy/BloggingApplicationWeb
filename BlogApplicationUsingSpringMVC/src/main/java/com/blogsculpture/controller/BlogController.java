@@ -42,14 +42,14 @@ public class BlogController {
 
     @GetMapping("/")
     public String getIndexPageOfWebApplication() {
-        return "redirect:/blog/0?category=all";
+        return "redirect:blog/0?category=all";
     }
 
     // for this end point there is no need to get authenticated and ie (no login
     // needed).
     @GetMapping("/blogsculpture")
     public String homeBlogPageHandler() {
-        return "redirect:/blog/0?category=all";
+        return "redirect:blog/0?category=all";
     }
 
     @GetMapping("/blog/redirectUser")
@@ -57,12 +57,12 @@ public class BlogController {
         if (authentication != null) {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             if (authorities.stream().anyMatch((auth) -> auth.getAuthority().equals("ROLE_ADMIN"))) {
-                return "redirect:/admin";
+                return "redirect:admin";
             } else if (authorities.stream().anyMatch((auth) -> auth.getAuthority().equals("ROLE_USER"))) {
-                return "redirect:/user";
+                return "redirect:user";
             }
         }
-        return "redirect:/blog";
+        return "redirect:blog";
     }
 
     @GetMapping("/addblog")
@@ -89,7 +89,7 @@ public class BlogController {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        return "redirect:/addblog?success=true";
+        return "redirect:addblog?success=true";
     }
 
     @GetMapping("/blogview/{id}")
@@ -119,7 +119,7 @@ public class BlogController {
         CustomUser loggedInUser = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = loggedInUser.getUser();
         if (blogEntity2.getAuthor().getUserId() != user.getUserId()) {
-            return "redirect:/editable/" + id + "?error=You are not the author of this blog to edit";
+            return "redirect:editable/" + id + "?error=You are not the author of this blog to edit";
         }
         try {
             if (!file.isEmpty()) {
@@ -136,7 +136,7 @@ public class BlogController {
         } catch (IOException e) {
             return "error";
         }
-        return "redirect:/editable/" + id + "?success = blog edited successfully";
+        return "redirect:editable/" + id + "?success = blog edited successfully";
     }
 
     // This end point is used by two pages

@@ -36,7 +36,7 @@ public class AdminController {
 	@GetMapping("/admin")
 	public String adminHome(Model model) {
 		adminService.setUsernameAndProfileImageToModel(model);
-		return "/admin/index";
+		return "admin/index";
 	}
 
 	@GetMapping("/admin/users")
@@ -44,7 +44,7 @@ public class AdminController {
 		List<User> users = adminService.findAllUsers();
 		adminService.setUsernameAndProfileImageToModel(model);
 		model.addAttribute("users", users);
-		return "/admin/user_table";
+		return "admin/user_table";
 	}
 
 	@GetMapping("/admin/admins")
@@ -52,7 +52,7 @@ public class AdminController {
 		List<User> users = adminService.findAllUsers();
 		adminService.setUsernameAndProfileImageToModel(model);
 		model.addAttribute("users", users);
-		return "/admin/admin_table";
+		return "admin/admin_table";
 	}
 
 	@RequestMapping(value = "/admin/deactivateaccount/{id}", method = { RequestMethod.GET })
@@ -61,9 +61,9 @@ public class AdminController {
 		adminService.deactivateUserAccount(id);
 		User user = userService.findById(id);
 		if (user.getRole().equals("ROLE_ADMIN")) {
-			return "redirect:/admin/admins";
+			return "redirect:admin/admins";
 		}
-		return "redirect:/admin/users";
+		return "redirect:admin/users";
 	}
 
 	@RequestMapping(value = "/admin/activateaccount/{id}", method = { RequestMethod.GET })
@@ -72,9 +72,9 @@ public class AdminController {
 		adminService.activateUserAccount(id);
 		User user = userService.findById(id);
 		if (user.getRole().equals("ROLE_ADMIN")) {
-			return "redirect:/admin/admins";
+			return "redirect:admin/admins";
 		}
-		return "redirect:/admin/users";
+		return "redirect:admin/users";
 	}
 
 	@GetMapping(value = "/admin/toggelRole/{id}")
@@ -83,9 +83,9 @@ public class AdminController {
 		adminService.updateUserRoleToAdmin(id);
 		User user = userService.findById(id);
 		if (user.getRole().equals("ROLE_ADMIN")) {
-			return "redirect:/admin/users";
+			return "redirect:admin/users";
 		}
-		return "redirect:/admin/admins";
+		return "redirect:admin/admins";
 	}
 
 	@GetMapping("/admin/blog")
@@ -100,14 +100,14 @@ public class AdminController {
 				.getPrincipal();
 		User user = userService.findById(authenticatedUser.getUser().getUserId());
 		model.addAttribute("userDto", user);
-		return "/admin/edit_details";
+		return "admin/edit_details";
 	}
 
 	@PostMapping("/admin/edit")
 	public String updateUser(@ModelAttribute("userDto") User userDto, Model model) {
 		userService.setUsernameAndProfileImageToModel(model);
 		userService.updateUser(userDto, userDto.getUserId());
-		return "redirect:/admin/edit";
+		return "redirect:admin/edit";
 	}
 
 
