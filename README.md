@@ -1,10 +1,11 @@
 # BloggingApplicationWeb
+### Description
+"Welcome to Blog Sculpture – your all-in-one platform for crafting, managing, and sharing captivating blogs. Designed with a powerful suite of functionalities and a robust tech stack, Blog Sculpture offers an unparalleled blogging experience for both users and administrators.
+
 ## Application is still under develoment.
 
 <img src="https://i.ibb.co/tKsLLJr/Screenshot-2023-12-04-091055.png" alt="Screenshot-2023-12-04-091055" border="0">
 
-### Description
-"Welcome to Blog Sculpture – your all-in-one platform for crafting, managing, and sharing captivating blogs. Designed with a powerful suite of functionalities and a robust tech stack, Blog Sculpture offers an unparalleled blogging experience for both users and administrators.
 
 ### Key Features:
 
