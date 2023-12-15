@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="base_user_layout"
+  xmlns:th="http://www.w3.org/1999/xhtml"
+>
+  <head>
+    <title>Blog Services</title>
+    <link rel="stylesheet" th:href="@{/css/blogservices.css}" />
+  </head>
+  <body style="background: white">
+    <div layout:fragment="content">
+      <!--      <h4>Blog Services</h4>-->
+      <div
+        class="post-filter container"
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        "
+      >
+        <div>
+          <a th:href="@{/addblog}"
+            ><button
+              style="
+                padding: 8px 30px;
+                border: transparent;
+                border-radius: 2px;
+                background-color: rgb(22, 169, 22);
+              "
+            >
+              CREATE NEW BLOG
+            </button></a
+          >
+        </div>
+        <div>
+          <form th:action="@{'/blogservices/'+ ${currentPage}}" method="get">
+            <select th:name="category" class="select-tag">
+              <option value="all" hidden>Select category</option>
+              <option value="all">All</option>
+              <option value="TRAVEL">Travel</option>
+              <option value="HEALTH">Health & Wellness</option>
+              <option value="TECHNOLOGY">Technology</option>
+              <option value="lIFESTYLE">Lifestyle</option>
+              <option value="FOOD & COOKING">Food & Cooking</option>
+              <option value="PERSONAL DEVELOPMENT">Personal Development</option>
+              <option value="FINANCE & MONEY">Finance & Money</option>
+              <option value="HOME & INTERIOR">Home & Interiors</option>
+            </select>
+            <select th:name="accesstype" id="accesstype">
+              <option value="null" hidden>Access Type</option>
+              <option value="PUBLIC">PUBLIC</option>
+              <option value="PRIVATE">PERSONAL</option>
+            </select>
+            <select th:name="status" id="status">
+              <option value="null" hidden>Status</option>
+              <option value="DRAFT">DRAFT</option>
+              <option value="COMPLETED">COMPLETED</option>
+            </select>
+            <button type="submit"><i class="bi bi-search"></i>Search</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="postServiceParent container">
+        <div
+          class="tech postServiceChild"
+          th:each="blog : ${blogDto}"
+          th:onclick="|redirectToSingleBlogpage('${blog.blogId}')|"
+        >
+          <img
+            id="banner-upload responsive-img"
+            th:src="@{'data:image/png;base64,'+${blog.encoded}}"
+          />
+          <h4 class="category" th:text="${blog.category}"></h4>
+          <h2>
+            <a
+              th:href="@{'/blogview/'+${blog.blogId}}"
+              class="post-title"
+              th:text="${blog.title}"
+            ></a>
+          </h2>
+          <span
+            class="post-date"
+            th:text="${#dates.format(blog.date, 'dd MMM yyyy')}"
+          ></span>
+          <p class="post-description" th:text="${blog.content}"></p>
+          <button
+            class="edit"
+            th:onclick="|redirectToEditBlogPageUsingBlogId('${blog.blogId}')|"
+            style="
+              display: block;
+              margin: auto;
+              padding: 5px 30px;
+              border: transparent;
+              border-radius: 2px;
+              /* background-color: rgb(64, 138, 235); */
+            "
+          >
+            EDIT
+          </button>
+        </div>
+      </div>
+      <section class="pagination-section">
+        <nav aria-label="Page navigation example" style="margin: auto">
+          Total Items [[${totalItems}]] : Page [[${currentPage}]] of
+          [[${totalPages}]] &nbsp; &nbsp; &nbsp;
+          <ul
+            class="pagination"
+            style="display: flex; align-items: center; justify-content: center"
+          >
+            <!-- check this again because u are not taking care of endpoint -->
+            <li class="page-item" th:if="${totalPages != 1}">
+              <a
+                class="page-link"
+                th:href="@{'/blogservices/' + ${currentPage-1}+ '?category=' +${currentcategory} + '&accesstype=' +${currentaccessType} + '&status=' + ${currentstatus}}"
+                aria-label="Previous"
+              >
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li
+              class="page-item"
+              th:each="i: ${#numbers.sequence(1, totalPages)}"
+            >
+              <a
+                class="page-link"
+                th:href="@{'/blogservices/' + ${i}+ '?category=' +${currentcategory} + '&accesstype=' +${currentaccesstype} + '&status=' + ${currentstatus}}"
+                >[[${i}]]</a
+              >
+            </li>
+            <li class="page-item" th:if="${totalPages != 1}">
+              <a
+                class="page-link"
+                th:href="@{'/blogservices/' + ${currentPage+1}+ '?category=' +${currentcategory} + '&accesstype=' +${currentaccessType} + '&status=' + ${currentstatus}}"
+                aria-label="Next"
+              >
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </section>
+    </div>
+  </body>
+</html>

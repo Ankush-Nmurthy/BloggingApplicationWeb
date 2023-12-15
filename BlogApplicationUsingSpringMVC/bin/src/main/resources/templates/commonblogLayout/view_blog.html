@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Blog view</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog : Editor</title>
+    <link rel="stylesheet" th:href="@{/css/view-blog.css}" />
+    <link
+      th:href="@{https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css}"
+      rel="stylesheet"
+    />
+    <link th:href="@{/css/elegant-icons-style.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/blogMain.css}" />
+  </head>
+
+  <body>
+    <div
+      class="banner responsive-div"
+      style="width: 100%; position: relative; border: 1px solid red"
+    >
+      <img
+        id="banner-upload responsive-img"
+        th:src="@{'data:image/png;base64,'+${blogDto.encoded}}"
+      />
+    </div>
+    <div class="information">
+      <div class="author">
+        <p style="display: inline-block">Author Name :</p>
+        <p style="display: inline-block" th:text="${author}"></p>
+      </div>
+      <div class="extras">
+        <p style="display: inline-block">Date of Creation :</p>
+        <p
+          style="display: inline-block"
+          th:text="${#dates.format(blogDto.date, 'dd-MM-yyyy')}"
+        ></p>
+      </div>
+    </div>
+    <div class="blog">
+      <h1 id="blog-heading" th:text="${blogDto.title}">Default Heading</h1>
+      <div id="editableDiv" class="editable-content">
+        <span th:text="${blogDto.content}"> </span>
+      </div>
+    </div>
+    <div class="extra-info">
+      <p>
+        <span th:if="${blogDto.updated != null}">
+          updated :
+          <span th:text="${#dates.format(blogDto.date, 'dd-MM-yyyy')}"></span>
+        </span>
+      </p>
+      <!-- Add this code inside the "blog" div in your HTML -->
+      <div class="like-section">
+        <span>Likes: <span th:text="${likeCount}">0</span></span>
+        <form
+          id="likeDislikeButton"
+          th:action="@{/blog/like/{id}(id=${blogDto.blogId})}"
+          method="post"
+        >
+          <button
+            type="submit"
+            name="action"
+            class="likeDislike-button"
+            value="like"
+          >
+            Like
+          </button>
+          <button
+            type="submit"
+            name="action"
+            class="likeDislike-button"
+            value="dislike"
+          >
+            Dislike
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="comments">
+      <h3>Comments:</h3>
+      <div th:each="comment : ${blogDto.comments}" class="sub-comments">
+        <p th:text="${comment.user.name}"></p>
+        <p th:text="${comment.comment}"></p>
+      </div>
+
+      <h3>Add Comment:</h3>
+      <!-- <form
+        th:action="@{/blog/comment/{id}(id=${blogDto.blogId})}"
+        method="post"
+      >
+        <textarea
+          name="comment"
+          rows="4"
+          placeholder="Write your comment here"
+        ></textarea>
+        <button type="submit">Submit Comment</button>
+      </form> -->
+    </div>
+    <footer>
+      <div class="footer-container">
+        <div class="sec aboutus">
+          <h2>About Us</h2>
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus
+            quisquam minus quo illo numquam vel incidunt pariatur hic commodi
+            expedita tempora praesentium at iure fugiat ea, quam laborum aperiam
+            veritatis.
+          </p>
+          <ul class="sci">
+            <li>
+              <a href="#"><i class="bx bxl-facebook"></i></a>
+            </li>
+            <li>
+              <a href="#"><i class="bx bxl-instagram"></i></a>
+            </li>
+            <li>
+              <a href="#"><i class="bx bxl-twitter"></i></a>
+            </li>
+            <li>
+              <a href="#"><i class="bx bxl-linkedin"></i></a>
+            </li>
+          </ul>
+        </div>
+        <div class="sec quicklinks">
+          <h2>Quick Links</h2>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+          </ul>
+        </div>
+        <div class="sec contactBx">
+          <h2>Contact Info</h2>
+          <ul class="info">
+            <li>
+              <span><i class="bx bxs-map"></i></span>
+              <span
+                >Lorem ipsum dolor sit amet<br />
+                consectetur adipisicing elit.<br />
+                Placeat, quibusdam.</span
+              >
+            </li>
+            <li>
+              <span><i class="bx bx-envelope"></i></span>
+              <p>
+                <a href="ankushn566@gmail.com">ankushn566@gmail.com</a>
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+    <script>
+      /**
+       * This script is written to append the "<br>", where ever we have /n in the content.
+       * and this is happening when the Dom content is loaded (DOMContentLoaded).
+       * Iam using (DOMContentLoaded) event to triger the changes that are need to be done.
+       * */
+      document.addEventListener("DOMContentLoaded", function () {
+        var editableDiv = document.getElementById("editableDiv");
+        var content = editableDiv.innerText;
+        var blogheading = document.getElementById("blog-heading");
+        blogheading.innerText = blogheading.innerText.toUpperCase();
+        content = content.replace(/\\n/g, "<br>");
+        // console.log(content);
+        editableDiv.innerHTML = content;
+      });
+    </script>
+    <script>
+      const likeDislikeButton = document.getElementById("likeDislikeButton");
+      const currentBlogId = likeDislikeButton
+        .getAttribute("action")
+        .split("/")[3];
+      likeDislikeButton.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const clickAction = e.submitter;
+        const clickActionValue = clickAction.getAttribute("value");
+        if (clickActionValue == "like") {
+          likeDislikeButton.action = "/blog/like/" + currentBlogId;
+        } else if (clickActionValue == "dislike") {
+          likeDislikeButton.action = "/blog/dislike/" + currentBlogId;
+        }
+
+        likeDislikeButton.submit();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+  <head>
+    <title>Blog Page</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog-Sculpture</title>
+    <!-- Box-icon -->
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}"
+      integrity="sha384-<INTEGRITY>"
+      crossorigin="anonymous"
+    />
+    <link
+      th:href="@{https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css}"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <link th:href="@{/css/elegant-icons-style.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/blogMain.css}" />
+  </head>
+  <body>
+    <header>
+      <div class="nav container-1">
+        <div>
+          <a th:href="@{/blog/1?category=all}" class="logo"
+            >Blog <span>Sculpture</span></a
+          >
+        </div>
+        <div>
+          <a th:href="@{/registration}" class="login">Sign up</a>
+          <a th:href="@{/login}" class="login">Login</a>
+        </div>
+      </div>
+    </header>
+    <section class="home" id="home">
+      <div class="home-text container">
+        <h2 class="home-title">BLOG SCULPTURE</h2>
+        <span class="home-subtitle"
+          >Crafting Stories, Shaping Perspectives</span
+        >
+      </div>
+    </section>
+
+    <h3 class="ternding-heading">Trending Blogs</h3>
+    <section class="about container" id="about">
+      <div class="contentBx">
+        <h2 class="titleText">Catch up with the trending topics</h2>
+        <p class="title-text">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum eos
+          consequuntur voluptate dolorum totam provident ducimus cupiditate
+          dolore doloribus repellat. Saepe ad fugit similique quis quam. Odio
+          suscipit incidunt distinctio.
+          <br />Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed
+          blanditiis libero pariatur ipsum suscipit voluptates aut, repellendus
+          quos dolor autem, natus laboriosam consectetur maxime cumque, sunt
+          magni optio? Veritatis, ea?
+        </p>
+        <a href="#" class="btn2">Read more</a>
+      </div>
+      <div class="imgBx">
+        <img th:src="@{/img/about.png}" alt="" class="fitBg" />
+      </div>
+    </section>
+
+    <div class="post-filter container">
+      <form th:action="@{'/blog/'+ ${currentPage}}" method="get">
+        <select
+          th:name="category"
+          onchange="this.form.submit()"
+          class="select-tag"
+        >
+          <option value="" hidden>Select category</option>
+          <option value="all">All</option>
+          <option value="TRAVEL">Travel</option>
+          <option value="HEALTH">Health & Wellness</option>
+          <option value="TECHNOLOGY">Technology</option>
+          <option value="lIFESTYLE">Lifestyle</option>
+          <option value="FOOD & COOKING">Food & Cooking</option>
+          <option value="PERSONAL DEVELOPMENT">Personal Development</option>
+          <option value="FINANCE & MONEY">Finance & Money</option>
+          <option value="HOME & INTERIOR">Home & Interiors</option>
+        </select>
+      </form>
+    </div>
+
+    <div class="post container">
+      <!-- Post 1 -->
+      <div
+        class="post-box tech"
+        th:each="blog : ${blogDto}"
+        th:onclick="|redirectToSingleBlogpage('${blog.blogId}')|"
+      >
+        <img
+          id="banner-upload responsive-img"
+          th:src="@{'data:image/png;base64,'+${blog.encoded}}"
+        />
+        <h2 class="category" th:text="${blog.category}"></h2>
+        <a
+          th:href="@{'/blogview/'+${blog.blogId}}"
+          class="post-title"
+          th:text="${blog.title}"
+        ></a>
+        <span
+          class="post-date"
+          th:text="${#dates.format(blog.date, 'dd MMM yyyy')}"
+        ></span>
+        <p class="post-description" th:text="${blog.content}"></p>
+        <div class="profile">
+          <img th:src="@{/img/testi1.jpg}" alt="" class="profile-img" />
+          <p th:text="${blog.author.name}" class="profile-name"></p>
+        </div>
+      </div>
+    </div>
+    <!-- ============ Pagination Section ============ -->
+    <section class="pagination-section">
+      <nav aria-label="Page navigation example" style="margin: auto">
+        Total Items [[${totalItems}]] : Page [[${currentPage}]] of
+        [[${totalPages}]] &nbsp; &nbsp; &nbsp;
+        <ul
+          class="pagination"
+          style="display: flex; align-items: center; justify-content: center"
+        >
+          <li class="page-item" th:if="${totalPages != 1}">
+            <a
+              class="page-link"
+              th:href="@{'/blog/' + ${currentPage-1}+ '?category=' +${currentcategory}}"
+              aria-label="Previous"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li
+            class="page-item"
+            th:each="i: ${#numbers.sequence(1, totalPages)}"
+          >
+            <a
+              class="page-link"
+              th:href="@{'/blog/' + ${i}+ '?category=' + ${currentcategory}}"
+              >[[${i}]]</a
+            >
+          </li>
+          <li class="page-item" th:if="${totalPages != 1}">
+            <a
+              class="page-link"
+              th:href="@{'/blog/' + ${currentPage+1}+'?category=' + ${currentcategory}}"
+              aria-label="Next"
+            >
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </section>
+    <footer>
+      <div class="footer-container">
+        <div class="sec aboutus">
+          <h2>About Us</h2>
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus
+            quisquam minus quo illo numquam vel incidunt pariatur hic commodi
+            expedita tempora praesentium at iure fugiat ea, quam laborum aperiam
+            veritatis.
+          </p>
+          <ul class="sci">
+            <li>
+              <a href="#"><i class="bx bxl-facebook"></i></a>
+            </li>
+            <li>
+              <a href="#"><i class="bx bxl-instagram"></i></a>
+            </li>
+            <li>
+              <a href="#"><i class="bx bxl-twitter"></i></a>
+            </li>
+            <li>
+              <a href="#"><i class="bx bxl-linkedin"></i></a>
+            </li>
+          </ul>
+        </div>
+        <div class="sec quicklinks">
+          <h2>Quick Links</h2>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+          </ul>
+        </div>
+        <div class="sec contactBx">
+          <h2>Contact Info</h2>
+          <ul class="info">
+            <li>
+              <span><i class="bx bxs-map"></i></span>
+              <span>Banglore, Karnataka </span>
+            </li>
+            <li>
+              <span><i class="bx bx-envelope"></i></span>
+              <p>
+                <a href="ankushn566@gmail.com">ankushn566@gmail.com</a>
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+      integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script th:src="@{/js/blogIndex.js}"></script>
+    <script>
+      // nav background
+      let header = document.querySelector("header");
+
+      window.addEventListener("scroll", () => {
+        header.classList.toggle("shadow", window.scrollY > 0);
+      });
+
+      //Filter
+      $(document).ready(function () {
+        $(".filter-item").click(function () {
+          const value = $(this).attr("data-filter");
+          if (value == "all") {
+            $(".post-box").show("1000");
+          } else {
+            $(".post-box")
+              .not("." + value)
+              .hide(1000);
+            $(".post-box")
+              .filter("." + value)
+              .show("1000");
+          }
+        });
+        $(".filter-item").click(function () {
+          $(this)
+            .addClass("active-filter")
+            .siblings()
+            .removeClass("active-filter");
+        });
+      });
+    </script>
+    <script>
+      function redirectToSingleBlogpage(blogId) {
+        console.log(blogId);
+        window.location.href = "/blogview/" + blogId;
+      }
+    </script>
+  </body>
+</html>
