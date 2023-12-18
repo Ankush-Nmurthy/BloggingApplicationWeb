@@ -6,9 +6,21 @@
 >
   <body>
     <div layout:fragment="content">
-      <h4> DASHBOARD </h4>
-      <div>div1</div>
-      <div>div2</div>
+      <h4 class="panel-heading">Dashboard</h4>
+      <div class="dashboardContainer">
+        <div class="innerparent2">
+          <div class="child">
+            <p>CAtegory v/s Blog Count</p>
+            <div>
+              <canvas id="myChart1"></canvas>
+            </div>
+          </div>
+          <div class="child">
+            <p>Blog segregation based of Status and Accesstype</p>
+            <canvas id="myChart2"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

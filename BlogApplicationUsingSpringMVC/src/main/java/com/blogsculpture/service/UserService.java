@@ -1,10 +1,11 @@
 package com.blogsculpture.service;
 
 import java.util.List;
-
+import java.util.Map;
+import org.springframework.data.repository.query.Param;
 import org.springframework.ui.Model;
-
 import com.blogsculpture.dto.UserSignupDTO;
+import com.blogsculpture.model.Blog;
 import com.blogsculpture.model.User;
 
 public interface UserService {
@@ -29,4 +30,10 @@ public interface UserService {
 	User findUserByUserName(String username);
 
 	void saveUser(User user);
+
+	// user chart methods;
+	Map<String, Long> countBlogsWrittenByUserBasedOnUserId(Integer userId);
+
+	Map<String, Long> countingBlogsBasedOnAccessTypeAndStatusOfUser(Integer userId);
+
 }

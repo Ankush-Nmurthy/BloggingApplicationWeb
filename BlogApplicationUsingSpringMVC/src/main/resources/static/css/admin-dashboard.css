@@ -1,0 +1,78 @@
+.dashboardContainer {
+    width: 100%;
+    overflow: hidden;
+}
+
+.innerparent1 {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.innerparent1 > .child {
+    width: 30%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: cadetblue;
+    border-radius: 5px;
+}
+
+.innerparent1 >.child > h2 {
+    display: inline-block;
+    color: white;
+}
+  
+.innerparent2 {
+    width: 100%; 
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+  
+.innerparent2 > .child {
+    /* width: 40%;  */
+    /* height: 380px;  */
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(248, 248, 248);
+}
+
+.innerparent2 > .child > p{
+    padding: 15px;
+}
+
+#myChart, #myChart2 , #myChart3, #myChart4{
+    margin: auto;
+}
+  
+/* For tablets (portrait and landscape) */
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    .innerparent2 {
+        width: 100%; 
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        /* border: 1px solid blue; */
+    }
+    .innerparent2 > .child {
+        width: 100%; 
+        height: 380px; 
+        display: inline-block;
+        /* border: 1px solid green; */
+    }
+}
+  
+/* For mobile devices (portrait and landscape) */
+@media only screen and (max-width: 767px) {
+    .innerparent2 {
+        width: 100%; 
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        /* border: 1px solid blue; */
+    }
+}

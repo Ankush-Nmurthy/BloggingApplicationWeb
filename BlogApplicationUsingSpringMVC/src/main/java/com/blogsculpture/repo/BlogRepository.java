@@ -1,14 +1,20 @@
 package com.blogsculpture.repo;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 import com.blogsculpture.model.Blog;
 import com.blogsculpture.model.Like;
+import com.blogsculpture.model.Blog.AccessType;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Repository
 public interface BlogRepository extends JpaRepository<Blog, Integer> {
@@ -41,12 +47,12 @@ public interface BlogRepository extends JpaRepository<Blog, Integer> {
 //			@Param("status") Status status, @Param("category") String category, @Param("userId") Integer userId,
 //			Pageable page);
 
-	//1. findAllBlogs of user who logged in to the account.
+	// 1. findAllBlogs of user who logged in to the account.
 	Page<Blog> findByAuthorUserIdOrderByDateDesc(Integer authorUserId, Pageable pageable);
 
 	// 2. only category;
 	Page<Blog> findByCategoryAndAuthorUserIdOrderByDateDesc(String category, Integer authorUserId, Pageable pageable);
-	
+
 	// 3. category and access-type;
 	Page<Blog> findByCategoryAndAccessTypeAndAuthorUserIdOrderByDateDesc(String category, Blog.AccessType status,
 			Integer authorUserId, Pageable pageable);
@@ -58,6 +64,25 @@ public interface BlogRepository extends JpaRepository<Blog, Integer> {
 	// 5. category, status, access-type, AuthorId and pageable.
 	Page<Blog> findByCategoryAndAccessTypeAndStatusAndAuthorUserIdOrderByDateDesc(String category,
 			Blog.AccessType accessType, Blog.Status status, Integer authorUserId, Pageable pageable);
-	
-	
+
+	// visualization graphs data for admin's.
+	@Query("SELECT b.category, COUNT(b) From Blog b group by b.category")
+	List<Object[]> countingBlogByCategory();
+
+	@Query("SELECT b.accessType, count(b) FROM Blog b WHERE b.accessType = :value GROUP BY b.accessType")
+	List<Object[]> countingBlogsBasedOnAccessType(@Param("value") Blog.AccessType value);
+
+	@Query("SELECT b.status, count(b) FROM Blog b WHERE b.status = :value GROUP BY b.status")
+	List<Object[]> countingBlogsBasedOnStatus(@Param("value") Blog.Status value);
+
+	// for user graph;
+	@Query("SELECT category, COUNT(b) FROM Blog b WHERE author.userId = :id GROUP BY category")
+	List<Object[]> countBlogsWrittenByUserBasedOnUserIdGroupByCategory(@Param("id") Integer id);
+
+	@Query("SELECT b.accessType, count(b) FROM Blog b WHERE b.accessType = :value AND author.userId = :id GROUP BY b.accessType")
+	List<Object[]> countingBlogsBasedOnAccessTypeOfUser(@Param("value") Blog.AccessType value, @Param("id") Integer id);
+
+	@Query("SELECT b.status, count(b) FROM Blog b WHERE b.status = :value AND author.userId = :id GROUP BY b.status")
+	List<Object[]> countingBlogsBasedOnStatusOfUser(@Param("value") Blog.Status value, @Param("id") Integer id);
+
 }

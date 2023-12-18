@@ -45,7 +45,7 @@ public class BlogController {
         return "redirect:/blog/0?category=all";
     }
 
-    // for this end point there is no need to get authenticated and ie (no login
+    // for this end point there is no need to get authenticated, i.e (no login
     // needed).
     @GetMapping("/blogsculpture")
     public String homeBlogPageHandler() {

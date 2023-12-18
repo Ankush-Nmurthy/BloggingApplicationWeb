@@ -14,16 +14,6 @@
     <!--external css-->
     <!-- font icon -->
     <link th:href="@{/css/elegant-icons-style.css}" rel="stylesheet" />
-    <!-- <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" /> -->
-    <!-- full calendar css-->
-    <!-- <link
-      th:href="@{/assets/fullcalendar/fullcalendar/bootstrap-fullcalendar.css}"
-      rel="stylesheet"
-    /> -->
-    <!-- <link
-      th:href="@{/assets/fullcalendar/fullcalendar/fullcalendar.css}"
-      rel="stylesheet"
-    /> -->
     <!-- easy pie chart-->
     <link
       th:href="@{/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css}"
@@ -193,7 +183,7 @@
       <section id="main-content">
         <section
           class="wrapper"
-          style="border: 1px solid red; display: inline-block"
+          style="display: inline-block"
         >
           <div layout:fragment="content"></div>
         </section>
@@ -225,6 +215,19 @@
     <!-- custom select -->
     <script th:src="@{/js/jquery.customSelect.min.js}"></script>
     <script th:src="@{/assets/chart-master/Chart.js}"></script>
+
+    <!-- chart js CDN Link integration  -->
+    <script
+      type="text/javascript"
+      th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js}"
+    ></script>
+    <script
+      th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js}"
+      integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script th:src="@{/js/custom-charts-admin.js}"></script>
 
     <script th:src="@{/js/scripts.js}"></script>
     <script>
@@ -271,6 +274,17 @@
           },
         });
       });
+    </script>
+    <script>
+      function redirectToEditBlogPageUsingBlogId(id) {
+        id = parseInt(id);
+        window.location.href = "/editable/" + id;
+      }
+
+      //   function redirectToSingleBlogpage(id) {
+      //     id = parseInt(id);
+      //     window.location.href = "/blogview/" + id;
+      //   }
     </script>
   </body>
 </html>

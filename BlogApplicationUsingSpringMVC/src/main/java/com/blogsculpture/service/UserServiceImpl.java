@@ -1,21 +1,24 @@
 package com.blogsculpture.service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-
 import com.blogsculpture.appconfig.CustomUser;
 import com.blogsculpture.dto.UserSignupDTO;
 import com.blogsculpture.exceptions.UserNotFoundException;
 import com.blogsculpture.model.Address;
+import com.blogsculpture.model.Blog.AccessType;
+import com.blogsculpture.model.Blog.Status;
 import com.blogsculpture.model.User;
 import com.blogsculpture.repo.AddressRepository;
+import com.blogsculpture.repo.BlogRepository;
 import com.blogsculpture.repo.UserRepository;
 
 @Service
@@ -29,6 +32,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private PasswordEncoder encoder;
+
+	@Autowired
+	private BlogRepository blogRepository;
 
 	@Override
 	public User loginUser(String email, String password) {
@@ -131,4 +137,31 @@ public class UserServiceImpl implements UserService {
 	public void saveUser(User user) {
 		userRepository.save(user);
 	}
+
+	@Override
+	public Map<String, Long> countBlogsWrittenByUserBasedOnUserId(Integer id) {
+		Map<String, Long> map = new HashMap<>();
+		List<Object[]> result = blogRepository.countBlogsWrittenByUserBasedOnUserIdGroupByCategory(id);
+		for (Object[] obj : result) {
+			String key = (String) obj[0];
+			Long value = (Long) obj[1];
+			map.put(key, value);
+		}
+		return map;
+	}
+
+	@Override
+	public Map<String, Long> countingBlogsBasedOnAccessTypeAndStatusOfUser(Integer userId) {
+		Map<String, Long> map = new HashMap<>();
+		List<Object[]> result = blogRepository.countingBlogsBasedOnAccessTypeOfUser(AccessType.PRIVATE, userId);
+		map.put("Private", (Long) result.get(0)[1]);
+		result = blogRepository.countingBlogsBasedOnAccessTypeOfUser(AccessType.PUBLIC, userId);
+		map.put("Public", (Long) result.get(0)[1]);
+		result = blogRepository.countingBlogsBasedOnStatusOfUser(Status.COMPLETED, userId);
+		map.put("Completed", (Long) result.get(0)[1]);
+		result = blogRepository.countingBlogsBasedOnStatusOfUser(Status.DRAFT, userId);
+		map.put("Draft", (Long) result.get(0)[1]);
+		return map;
+	}
+
 }

@@ -4,14 +4,48 @@
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="base_admin_layout"
 >
+  <head>
+    <link rel="stylesheet" th:href="@{/css/admin-dashboard.css}" />
+  </head>
   <body>
     <div layout:fragment="content">
       <h4 class="panel-heading">Dashboard</h4>
       <div class="dashboardContainer">
-        <div class="dashboardContainerChild"></div>
-        <div class="dashboardContainerChild"></div>
-        <div class="dashboardContainerChild"></div>
-        <div class="dashboardContainerChild"></div>
+        <div class="innerparent1">
+          <div class="child">
+            <h2 th:text="${activeUser}"></h2>
+            <h2>Active users</h2>
+          </div>
+          <div class="child" style="background-color: red">
+            <h2 th:text="${deactiveUser}"></h2>
+            <h2>Blocked users</h2>
+            <div></div>
+          </div>
+          <div class="child">
+            <h2 th:text="${totaladmin}"></h2>
+            <h2>Administrators</h2>
+          </div>
+        </div>
+        <div class="innerparent2">
+          <div class="child">
+            <p>Number of users v/s Account created date</p>
+            <div>
+              <canvas id="myChart"></canvas>
+            </div>
+          </div>
+          <div class="child">
+            <p>Blog segregation based of Status and Accesstype</p>
+            <canvas id="myChart2"></canvas>
+          </div>
+          <div class="child">
+            <p>Active account v/s Deactivated account</p>
+            <canvas id="myChart3"></canvas>
+          </div>
+          <div class="child">
+            <p>Blogs Grouped on Category</p>
+            <canvas id="myChart4"></canvas>
+          </div>
+        </div>
       </div>
     </div>
   </body>
