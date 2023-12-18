@@ -1,7 +1,11 @@
 package com.blogsculpture.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +40,11 @@ public class AdminController {
 	@GetMapping("/admin")
 	public String adminHome(Model model) {
 		adminService.setUsernameAndProfileImageToModel(model);
+		int[] activeUsers = adminService.activeAndDeactiveUsersInPlatform();
+		Integer totalAdministrators = adminService.administratorCount();
+		model.addAttribute("totaladmin", totalAdministrators);
+		model.addAttribute("activeUser", activeUsers[0]);
+		model.addAttribute("deactiveUser", activeUsers[1]);
 		return "admin/index";
 	}
 
@@ -110,12 +119,46 @@ public class AdminController {
 		return "redirect:/admin/edit";
 	}
 
+	// methods for visualization charts;
+	@GetMapping("/admin/graph/activeUsers")
+	@ResponseBody
+	public ResponseEntity<?> graphForActiveAndDeactivatedUsers() {
+		int[] activeandDeactivedUser = adminService.activeAndDeactiveUsersInPlatform();
+		Map<String, Integer> userstatus = new HashMap<>();
+		userstatus.put("Active Users", activeandDeactivedUser[0]);
+		userstatus.put("InActive Users", activeandDeactivedUser[1]);
+		return new ResponseEntity<Map<String, Integer>>(userstatus, HttpStatus.OK);
+	}
 
+	@GetMapping("/admin/graph/blogsCategoryWise")
+	@ResponseBody
+	public ResponseEntity<?> graphForNumberOfBlogsCategoryWise() {
+		Map<String, Long> graphForNumberOfBlogsCategoryWise = adminService.graphForNumberOfBlogsCategoryWise();
+		System.out.println(graphForNumberOfBlogsCategoryWise);
+		return new ResponseEntity<>(graphForNumberOfBlogsCategoryWise, HttpStatus.OK);
+	}
+
+	@GetMapping("/admin/graph/userRegisteredMonthWise")
+	@ResponseBody
+	public ResponseEntity<?> graphForUserRegistrationMonthWise() {
+		Map<String, Long> graphForUserRegistrationMonthWise = adminService.graphForUserRegistrationMonthWise();
+		System.out.println(graphForUserRegistrationMonthWise);
+		return new ResponseEntity<>(graphForUserRegistrationMonthWise, HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/admin/graph/blogRadarGraphValues")
+	@ResponseBody
+	public ResponseEntity<?> graphForGettingCountOfBlogBasedOnAccessType() {
+		Map<String, Long> graphForUserRegistrationMonthWise = adminService.graphForGettingCountOfBlogBasedOnAccessType();
+		System.out.println(graphForUserRegistrationMonthWise);
+		return new ResponseEntity<>(graphForUserRegistrationMonthWise, HttpStatus.OK);
+	}
+	
 	// method for testing purpose.
 	@GetMapping("/persent/user")
 	@ResponseBody
 	public String getLoggedinUser() {
 		return (String) SecurityContextHolder.getContext().getAuthentication().getName();
 	}
-
 }

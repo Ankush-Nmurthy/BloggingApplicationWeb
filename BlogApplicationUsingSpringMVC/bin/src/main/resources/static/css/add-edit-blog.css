@@ -54,7 +54,6 @@
 }
 
 .information{
-    border: 1px solid red;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -68,7 +67,6 @@
     display: block;
     margin: auto;
     padding: 50px 30px;
-    border: 1px solid red;
     text-align: justify;
     line-height: 2em;
     /* font-weight: 400;
@@ -76,7 +74,6 @@
 }
 
 .blog > h1{
-    border: 1px solid red;
     text-align: center;
     padding: 10px;
     margin-bottom: 7%;
@@ -157,7 +154,6 @@ textarea::-webkit-scrollbar-thumb{
 .comments{
     width: 80%;
     margin: auto;
-    border: 1px solid red;
     padding: 30px;
 }
 
@@ -173,7 +169,6 @@ textarea::-webkit-scrollbar-thumb{
 .sub-comments{
     width: 80%;
     margin: auto;
-    border: 1px solid red;
 }
 
 .comments h3{

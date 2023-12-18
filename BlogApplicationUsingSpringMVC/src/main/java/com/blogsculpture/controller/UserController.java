@@ -1,19 +1,17 @@
 package com.blogsculpture.controller;
 
-import java.util.Base64;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import com.blogsculpture.appconfig.CustomUser;
-import com.blogsculpture.exceptions.NotFoundException;
-import com.blogsculpture.model.Blog;
 import com.blogsculpture.model.User;
 import com.blogsculpture.service.BlogService;
 import com.blogsculpture.service.UserService;
@@ -49,8 +47,6 @@ public class UserController {
 		return "redirect:/user/edit";
 	}
 
-
-
 	// currently this method is not in use because the alternate url is
 	// "/blog/{currentpage}?category=all"
 	@GetMapping("/user/blog")
@@ -59,4 +55,25 @@ public class UserController {
 		return "commonblogLayout/blog_page";
 	}
 
+	// users Dash-board graphs
+	@GetMapping("/user/graph/blogsByCategory")
+	@ResponseBody
+	public ResponseEntity<?> countBlogsWrittenByUserBasedOnUserId() {
+		CustomUser authenticatedUser = (CustomUser) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		Integer userId = authenticatedUser.getUser().getUserId();
+		Map<String, Long> countBlogsWrittenByUserBasedOnUserId = userService
+				.countBlogsWrittenByUserBasedOnUserId(userId);
+		return new ResponseEntity<Map<String, Long>>(countBlogsWrittenByUserBasedOnUserId, HttpStatus.OK);
+	}
+
+	@GetMapping("/user/graph/blogsByAccessTypeAndStatus")
+	@ResponseBody
+	public ResponseEntity<?> countingBlogsBasedOnAccessTypeOfUser() {
+		CustomUser authenticatedUser = (CustomUser) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		Integer userId = authenticatedUser.getUser().getUserId();
+		Map<String, Long> result = userService.countingBlogsBasedOnAccessTypeAndStatusOfUser(userId);
+		return new ResponseEntity<Map<String, Long>>(result, HttpStatus.OK);
+	}
 }
