@@ -2,8 +2,6 @@
 ### Description
 Welcome to Blog Sculpture – your all-in-one platform for crafting, managing, and sharing captivating blogs. Designed with a powerful suite of functionalities and a robust tech stack, Blog Sculpture offers an unparalleled blogging experience for both users and administrators.
 
-## Application is still under develoment.
-
 <img src="https://i.ibb.co/tKsLLJr/Screenshot-2023-12-04-091055.png" alt="Screenshot-2023-12-04-091055" border="0">
 
 
@@ -24,3 +22,35 @@ Welcome to Blog Sculpture – your all-in-one platform for crafting, managing, a
 **Secure User Blogs:** Safeguard your content with our robust security measures. Each user's blog is protected, ensuring privacy and control over your published work.
 
 **Tech Stack:** Java, Spring Boot, Spring Data JPA, Thymeleaf, and MySQL, Blog Sculpture combines cutting-edge technologies to deliver a seamless, high-performance blogging platform.
+
+## Database
+<img src="https://i.ibb.co/3hpZtQP/Screenshot-2023-12-18-200621.png" alt="Screenshot-2023-12-18-200621" border="0" width="700px">
+
+## Project Configuration
+
+The project uses the following configuration for the Spring Boot application:
+
+```properties
+server.port = 9090 {you can also set your default port here}
+#To configuer your own server port please follow the path provided below and change the server.port value;
+#Create a database of your choice and replace in spring.datasource.url=jdbc:mysql://localhost:3306/{here}
+
+spring.datasource.driver=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/growgarden
+spring.datasource.username= Your Username
+spring.datasource.password= Your Password
+
+spring.jpa.hibernate.ddl-auto=update
+
+```
+## Setup
+
+To run the application, follow these steps:
+
+1. Ensure you have Java and MySQL installed on your system.
+
+2. Set up the database with the provided connection details in the `application.properties`.
+
+3. Run the Spring Boot application.
+
+4. Access the application using the specified port (e.g., http://localhost:9090).
